@@ -1,0 +1,7 @@
+{
+    "CodeGPT.Autocomplete.enabled": true,
+    "CodeGPT.apiKey": "OpenAI",
+    "CodeGPT.Autocomplete.suggestionDelay": 300,
+    "pieces.autocomplete": true,
+    "pieces.autoExpansion": false
+}
