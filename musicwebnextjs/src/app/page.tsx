@@ -1,12 +1,22 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+'use client'
 
+import PageUi from "@/components/page/pageui";
+import { useEffect } from "react";
 
 export default function Home() {
-  return (
-    <main>
-   
+  useEffect(() => {
 
-    </main>
+
+  }, [])
+
+  return (
+   <PageUi>
+    <h1
+    className="text-3xl font-bold "
+    >
+      Home
+    </h1>
+   </PageUi>
 
   );
 }
