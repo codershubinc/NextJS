@@ -16,7 +16,7 @@ function Input({
 }, ref: any) {
     const id = useId()
     return (
-        <div className='w-full px-5 flex flex-col '>
+        <div className='w-full px-5 flex flex-col justify-center items-center '>
             {label &&
                 <label
                     htmlFor={id}

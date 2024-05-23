@@ -16,10 +16,10 @@ export class DbConfig {
     }
     async createDocument({
         id,
-        avatar,
         userName,
         name,
         email,
+        avatar,
         playList,
     }: {
         id: string
@@ -35,12 +35,9 @@ export class DbConfig {
                 conf.appwriteCollectionUserPrefsId,
                 id,
                 {
-                    avatar,
                     userName,
                     name,
                     email,
-                    playList,
-
                 }
             )
 
@@ -55,14 +52,29 @@ export class DbConfig {
         prefs: any,
         id: string
     }) {
-        return await this.databases.updateDocument(
-            conf.appwriteDatabaseId,
-            conf.appwriteCollectionUserPrefsId,
-            id,
-            {
-                ...prefs
-            }
-        )
+        try {
+            return await this.databases.updateDocument(
+                conf.appwriteDatabaseId,
+                conf.appwriteCollectionUserPrefsId,
+                id,
+                {
+                    ...prefs
+                }
+            )
+        } catch (error) {
+            throw error
+        }
+    }
+    async getDocument(id: string) {
+        try {
+            return await this.databases.getDocument(
+                conf.appwriteDatabaseId,
+                conf.appwriteCollectionUserPrefsId,
+                id
+            )
+        } catch (error) {
+            throw error
+        }
     }
 }
 const dbConfig = new DbConfig()
