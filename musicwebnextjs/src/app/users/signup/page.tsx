@@ -6,7 +6,7 @@ import SignUpForm from './signUpForm'
 // import Link from 'next/link'
 
 
-const  page:React.FC = () => {
+const  Page:React.FC = () => {
     const { isUserLogin } = useAuth();
 
   
@@ -22,4 +22,4 @@ const  page:React.FC = () => {
     )
 }
 
-export default page
+export default Page
