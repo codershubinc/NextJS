@@ -109,7 +109,7 @@ const LoginPage: React.FC = () => {
                     )}
                 </form>
                 <p>
-                   {` Don't have an account?`} <Link href="/users/signup">Sign Up</Link>
+                    {` Don't have an account?`} <Link href="/users/signup">Sign Up</Link>
                 </p>
             </div>
         </PageUi>
