@@ -1,12 +1,10 @@
 'use client';
-import music from '@/config/dataBase/playListsDb/music';
 import musicConfig from '@/config/dataBase/playListsDb/musicConfig';
 import musicPlayList from '@/config/dataBase/playListsDb/musicPlayList';
 import cryptoUtil from '@/lib/util/CryptoUtil';
 import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import MusicPlayer from './musicPlayer';
-import userAvatarDBConfig from '@/config/dataBase/userPrefs/userAvatarDBConfig';
 import { useAuth } from '@/context/AuthContext';
 import PageUi from '@/components/page/pageui';
 
@@ -18,8 +16,7 @@ function Page() {
     const [musicDetails, setMusicDetails] = useState<any>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [audio] = useState(new Audio());
-    const { setIsSongPlaying } = useAuth()
+    const { setIsSongPlaying, isUserLogin } = useAuth()
     const [id, setId] = useState('');
 
     useEffect(() => {
@@ -54,6 +51,8 @@ function Page() {
         setIsSongPlaying(true);
 
     }
+    console.log('isUserLogin', isUserLogin);
+
 
 
     const musicIds = musicDetails.map((music: any) => music.$id);
@@ -69,6 +68,10 @@ function Page() {
                     <p className="text-red-500">{error}</p>
                 ) : musicDetails.length === 0 ? (
                     <p>No songs found in this playlist</p>
+                ) : !isUserLogin ? (
+                    <div className="grid grid-cols-1 w-max mx-auto gap-4">
+                        Please login to play music
+                    </div>
                 ) : (
                     <div className="grid grid-cols-1 w-max mx-auto gap-4">
                         {musicDetails.map((music: any) => (

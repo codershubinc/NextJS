@@ -12,9 +12,13 @@ const SearchComponent = () => {
 
     const handleSearch = async () => {
         console.log('Searching music playlists...');
+        const queries: any = {
+            queryType: 'name',
+            queryName: searchQuery
+        }
 
         try {
-            const results = await musicPlayList.getMusicPlayList(searchQuery);
+            const results = await musicPlayList.getMusicPlayList(queries);
             setSearchResults(results.documents);
             console.log('Search results:', results.documents);
 

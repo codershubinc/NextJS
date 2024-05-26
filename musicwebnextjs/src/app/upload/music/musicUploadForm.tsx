@@ -115,7 +115,7 @@ const MusicUploadForm = ({ className }: { className: string }) => {
                 </div>
 
                 <div className="grid w-full max-w-sm items-center gap-1.5">
-                    <Label htmlFor="singer">Singers <p className='text-gray-500 text-sm'>('please give in lowercase with comma separated')</p> </Label>
+                    <Label htmlFor="singer">Singers <p className='text-gray-500 text-sm'>{`('please give in lowercase with comma separated')`}</p> </Label>
                     <Input
                         type="text"
                         id="singer"
