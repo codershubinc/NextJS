@@ -1,7 +1,7 @@
-'use client'
+'use client';
 import React, { useEffect, useState } from 'react';
 import PageUi from '@/components/page/pageui';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
 import LogOutBtn from '@/components/Buttons/LogOutBtn';
@@ -16,30 +16,24 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import CopyButton from '@/components/Buttons/CopyBtn';
 import AvatarChange from './AvatarChange';
-
 
 const UserDashboard: React.FC = () => {
     const [currentUserPrefs, setCurrentUserPrefs] = useState<any>({});
     const [isMyDashboard, setIsMyDashboard] = useState(true);
     const router = useRouter();
     const { isUserLogin, currentUser, userPrefs } = useAuth();
-    const searchParams = new URLSearchParams(window.location.search);
-    const IdInUrl = cryptoUtil.decryptString(searchParams.get('userId') || '');
-    const encryptedUserId = cryptoUtil.encryptString(currentUser?.$id);
-
-    //avatar is not changed based on the user id make it later
-
 
     useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const encryptedUserId = params.get('userId');
+        const IdInUrl = encryptedUserId ? cryptoUtil.decryptString(encryptedUserId) : '';
+
         const fetchUser = async () => {
             try {
-                if (IdInUrl === currentUser?.$id) {
-                    setCurrentUserPrefs(userPrefs);
-                    setIsMyDashboard(true);
-                } else if (IdInUrl === '') {
+                if (IdInUrl === currentUser?.$id || IdInUrl === '') {
                     setCurrentUserPrefs(userPrefs);
                     setIsMyDashboard(true);
                 } else {
@@ -53,47 +47,38 @@ const UserDashboard: React.FC = () => {
         };
 
         fetchUser();
-    }, [IdInUrl, currentUser, userPrefs]);
+    }, [currentUser, userPrefs]);
+
+    const userDashboardUrl = `/users/userdashboard?userId=${cryptoUtil.encryptString(currentUser?.$id)}`;
 
     return (
-        <PageUi >
+        <PageUi>
             {!isMyDashboard && (
                 <Link
-                    href={`/users/userdashboard?userId=${encryptedUserId}`}
+                    href={userDashboardUrl}
                     className='fixed top-[50px] right-5'
                 >
                     Visit Your Dashboard
                 </Link>
             )}
-            <div
-                className='flex flex-col items-center justify-center w-max'
-            >
+            <div className='flex flex-col items-center justify-center w-max'>
                 <UserAvatar />
                 {isUserLogin ? (
                     <>
-                        <Card
-                            className='w-full flex flex-col items-center justify-center  mx-auto'
-                        >
+                        <Card className='w-full flex flex-col items-center justify-center mx-auto'>
                             <CardHeader>
-                                <CardTitle> Name : {currentUserPrefs.name}</CardTitle>
-
+                                <CardTitle>Name: {currentUserPrefs.name}</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <CardTitle>UserName : {currentUserPrefs.userName}</CardTitle>
-                                <CardDescription> Email : {currentUserPrefs.email}</CardDescription>
+                                <CardTitle>UserName: {currentUserPrefs.userName}</CardTitle>
+                                <CardDescription>Email: {currentUserPrefs.email}</CardDescription>
                             </CardContent>
                             <CardFooter>
-                                <div className='flex  gap-2'>
-                                    {isMyDashboard
-                                        &&
-
-                                        <LogOutBtn path='/users/login' className='' />
-
-                                    }
+                                <div className='flex gap-2'>
+                                    {isMyDashboard && <LogOutBtn path='/users/login' className='' />}
                                     <CopyButton textToCopy={window.location.href} />
                                 </div>
                             </CardFooter>
-
                         </Card>
                         <AvatarChange />
                     </>

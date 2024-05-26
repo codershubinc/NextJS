@@ -1,31 +1,28 @@
 'use client';
+import React, { useEffect, useState } from 'react';
 import musicConfig from '@/config/dataBase/playListsDb/musicConfig';
 import musicPlayList from '@/config/dataBase/playListsDb/musicPlayList';
 import cryptoUtil from '@/lib/util/CryptoUtil';
-import { useSearchParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
 import MusicPlayer from './musicPlayer';
 import { useAuth } from '@/context/AuthContext';
 import PageUi from '@/components/page/pageui';
 
-
-
 function Page() {
-    const urlParams = useSearchParams();
     const [playListId, setPlayListId] = useState<string>('');
     const [musicDetails, setMusicDetails] = useState<any>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const { setIsSongPlaying, isUserLogin } = useAuth()
+    const { setIsSongPlaying, isUserLogin } = useAuth();
     const [id, setId] = useState('');
 
-
     useEffect(() => {
-        if (urlParams) {
-            const playListId = cryptoUtil.decryptString(urlParams.get('id') as string);
+        const params = new URLSearchParams(window.location.search);
+        const encryptedId = params.get('id');
+        if (encryptedId) {
+            const playListId = cryptoUtil.decryptString(encryptedId);
             setPlayListId(playListId);
         }
-    }, [urlParams]);
+    }, []);
 
     useEffect(() => {
         const getSongsFromPlayList = async () => {
@@ -54,17 +51,15 @@ function Page() {
             getSongsFromPlayList();
         }
     }, [playListId]);
+
     const playMusic = (mId: string) => {
         setId(mId);
         setIsSongPlaying(true);
+    };
 
-    }
     console.log('isUserLogin', isUserLogin);
 
-
-
     const musicIds = musicDetails.map((music: any) => music.$id);
-
 
     return (
         <PageUi>
