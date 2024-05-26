@@ -5,8 +5,8 @@ import { useAuth } from '@/context/AuthContext'
 import SignUpForm from './signUpForm'
 import Link from 'next/link'
 
+const { isUserLogin } = useAuth()
 function page() {
-    const { isUserLogin } = useAuth()
 
     if (isUserLogin) {
         return <PageUi

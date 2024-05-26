@@ -50,7 +50,7 @@ const SearchComponent = () => {
                     <h2>Search Results:</h2>
                     <ul>
                         {searchResults.map((result) => (
-                            <div>
+                            <div key={result.$id} >
                                 <li key={result.$id}>{result.name}</li>
                                 <li key={result.$id}>avatar id = {result.musicPlayListAvatar} <CopyButton textToCopy={result.musicPlayListAvatar} />  </li>
                             </div>
