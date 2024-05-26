@@ -12,7 +12,7 @@ import cryptoUtil from '@/lib/util/CryptoUtil';
 
 const UserConf: React.FC = () => {
     const navigate = useRouter();
-    const { currentUser, setIsUserLogin } = useAuth();
+    const { currentUser, setIsUserLogin, setUserPrefs } = useAuth();
 
     const { register, handleSubmit, setValue } = useForm();
     const [error, setError] = useState<string>('');
@@ -40,6 +40,7 @@ const UserConf: React.FC = () => {
             console.log('data', data, 'UserCreate', userCreate);
             if (userCreate) {
                 const encryptedId = cryptoUtil.encryptString(String(userCreate.$id));
+                setUserPrefs(userCreate)
                 setIsUserLogin(true);
                 navigate.push('/users/userdashboard?userId=' + encryptedId);
             }

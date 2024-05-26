@@ -1,7 +1,6 @@
 'use client'
 import authService from '@/config/auth/auth';
 import dbConfig from '@/config/dataBase/userPrefs/UserDBConfig';
-import { log } from 'console';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 interface AuthContextType {
@@ -11,6 +10,10 @@ interface AuthContextType {
     setCurrentUser: React.Dispatch<React.SetStateAction<any>>;
     userPrefs: any;
     setUserPrefs: React.Dispatch<React.SetStateAction<any>>
+    isSongPlaying: boolean;
+    setIsSongPlaying: React.Dispatch<React.SetStateAction<boolean>>
+    currentlyPlayingMusicInfo: any;
+    setCurrentlyPlayingMusicInfo: React.Dispatch<React.SetStateAction<any>>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -19,6 +22,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [isUserLogin, setIsUserLogin] = useState(false);
     const [currentUser, setCurrentUser] = useState<any>([]);
     const [userPrefs, setUserPrefs] = useState<any>([]);
+    const [isSongPlaying, setIsSongPlaying] = useState(false);
+    const [currentlyPlayingMusicInfo, setCurrentlyPlayingMusicInfo] = useState<any>([]);
 
     useEffect(() => {
         const checkUserLogin = async () => {
@@ -30,6 +35,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 setIsUserLogin(true);
                 const prefs = await dbConfig.getDocument(user.$id);
                 setUserPrefs(prefs);
+                setIsSongPlaying(false)
 
             } catch (error) {
                 setIsUserLogin(false);
@@ -48,7 +54,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 currentUser,
                 setCurrentUser,
                 userPrefs,
-                setUserPrefs
+                setUserPrefs,
+                isSongPlaying,
+                setIsSongPlaying,
+                currentlyPlayingMusicInfo,
+                setCurrentlyPlayingMusicInfo
             }
         }>
             {children}

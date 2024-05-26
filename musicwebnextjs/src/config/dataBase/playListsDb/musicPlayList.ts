@@ -1,5 +1,6 @@
-import { Client, ID, Databases, Storage } from "appwrite";
+import { Client, ID, Databases, Storage, Query, } from "appwrite";
 import conf from "@/conf/conf"
+
 
 export class MusicPlayList {
 
@@ -16,59 +17,104 @@ export class MusicPlayList {
     }
     async createMusicPlayList({
         name,
+        nameId,
         musicContains,
         playListSingers,
         like,
-        likedId,
+        likeId,
         musicPlayListAvatar,
-        musicPlayListBanner
+        musicPlayListBanner,
+        language
+
     }: {
         name: string
+        nameId: string
         musicContains: any
         playListSingers: any
         like: number
-        likedId: any
+        likeId: any
         musicPlayListAvatar: string
         musicPlayListBanner: string
+        language: string
     }) {
-        return await this.databases.createDocument(
-            conf.appwriteDatabaseId,
-            conf.appwriteCollectionMusicPlayListId,
-            ID.unique(),
-            {
-                name,
-                musicContains,
-                playListSingers,
-                like,
-                likedId,
-                musicPlayListAvatar,
-                musicPlayListBanner
-            }
-        )
+        try {
+            return await this.databases.createDocument(
+                conf.appwriteDatabaseId,
+                conf.appwriteCollectionMusicPlayListId,
+                nameId,
+                {
+                    name,
+                    musicContains,
+                    playListSingers,
+                    like,
+                    likeId,
+                    musicPlayListAvatar,
+                    musicPlayListBanner,
+                    language
+                }
+            )
+        } catch (error) {
+            throw error
+        }
     }
 
-    async getMusicPlayList(
-        query: any
-    ) {
-        return await this.databases.listDocuments(
-            conf.appwriteDatabaseId,
-            conf.appwriteCollectionMusicPlayListId,
-            query
-        )
+    async getMusicPlayList(queries: { queryType: string; queryName: string }[]): Promise<any> {
+        try {
+            const queryObjects = queries.map((query) =>
+                Query.equal(query.queryType, query.queryName)
+            );
+            console.log("queryObjects", queryObjects);
+
+            return await this.databases.listDocuments(
+                conf.appwriteDatabaseId,
+                conf.appwriteCollectionMusicPlayListId,
+                queryObjects
+            );
+        } catch (error) {
+            console.error("Appwrite service :: getMusicPlayList :: error", error);
+            return [];
+        }
+    }
+    async getMusicPlayListAllWoQuery(): Promise<any> {
+        try {
+            return await this.databases.listDocuments(
+                conf.appwriteDatabaseId,
+                conf.appwriteCollectionMusicPlayListId,
+                [
+                    Query.orderDesc('like'),
+                ]
+            );
+        } catch (error) {
+            console.error("Appwrite service :: getMusicPlayListAllWoQuery :: error", error);
+            return [];
+        }
+    }
+
+    async getMusicPlayListOne(id: string): Promise<any> {
+        try {
+            return await this.databases.getDocument(
+                conf.appwriteDatabaseId,
+                conf.appwriteCollectionMusicPlayListId,
+                id
+            );
+        } catch (error) {
+            console.error("Appwrite service :: getMusicPlayListOne :: error", error);
+            throw error;
+        }
     }
     async updateMusicPlayList({
         id,
-        prefs
+        musicContains
     }: {
         id: string
-        prefs: any
+        musicContains: any
     }) {
         return await this.databases.updateDocument(
             conf.appwriteDatabaseId,
             conf.appwriteCollectionMusicPlayListId,
             id,
             {
-                ...prefs
+                musicContains
             }
         )
     }

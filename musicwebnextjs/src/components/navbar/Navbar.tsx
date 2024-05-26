@@ -7,7 +7,7 @@ import { ModeToggle } from '@/components/ui/themeBtn'
 function Navbar({ className }: { className: string }) {
     return (
         <header
-            className='  dark:bg-black dark:text-white sticky top-0  '
+            className={cn("flex flex-col  sticky dark:bg-black top-0  ", className)}
         >
             <nav
                 className={cn("flex items-center h-[45px] dark:bg-[#212121] justify-between p-4  mx-8 rounded-full mt-2", className)}

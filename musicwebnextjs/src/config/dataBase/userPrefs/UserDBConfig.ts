@@ -45,13 +45,10 @@ export class DbConfig {
             throw error
         }
     }
-    async updateDocument({
-        prefs,
-        id
-    }: {
-        prefs: any,
-        id: string
-    }) {
+    async updateDocument(
+        id: string,
+        prefs: any
+    ) {
         try {
             return await this.databases.updateDocument(
                 conf.appwriteDatabaseId,

@@ -15,7 +15,7 @@ import dbConfig from '@/config/dataBase/userPrefs/UserDBConfig';
 
 function SignUpForm() {
     const navigate = useRouter();
-    const { setCurrentUser, setUserPrefs } = useAuth();
+    const { setCurrentUser } = useAuth();
     const [isAccountCreated, setIsAccountCreated] = useState<boolean>(false);
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [error, setError] = useState('');
@@ -36,12 +36,6 @@ function SignUpForm() {
                     const user = await authService.getCurrentUser();
                     if (user) {
                         setCurrentUser(user);
-                        const userPref = await dbConfig.getDocument(user.$id);
-                        if (userPref) {
-                            setUserPrefs(userPref);
-                            console.log('userPref call at sign up', userPref);
-
-                        }
                         setIsAccountCreated(true);
                     }
                 }

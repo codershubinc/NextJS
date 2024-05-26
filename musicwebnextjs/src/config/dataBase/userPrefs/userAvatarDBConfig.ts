@@ -23,10 +23,17 @@ export class UserAvatarDBConfig {
         )
     }
     async deleteUserAvatar(avatarId: string) {
-        return await this.bucket.deleteFile(
-            conf.appwriteAvatarBucketId,
-            avatarId
-        )
+        try {
+            await this.bucket.deleteFile(
+                conf.appwriteAvatarBucketId,
+                avatarId
+            )
+            return true
+        } catch (error) {
+            console.log("Appwrite serive :: deleteFile :: error", error);
+            return false
+        }
+
     }
     getUserAvatarPreview(avatarId: string) {
         return this.bucket.getFilePreview(
