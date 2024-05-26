@@ -1,4 +1,3 @@
-
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
 import music from '@/config/dataBase/playListsDb/music';
@@ -10,46 +9,49 @@ interface Props {
 }
 
 const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId }) => {
-    const [currentTrackIndex, setCurrentTrackIndex] = useState<number>(-1);
+    const [currentTrackIndex, setCurrentTrackIndex] = useState( -1);
     const [currentTime, setCurrentTime] = useState<number>(0);
     const [duration, setDuration] = useState<number>(0);
-    const audioRef = useRef(new Audio());
+    const audioRef = useRef<HTMLAudioElement | null>(null);
     const { isSongPlaying } = useAuth();
 
     useEffect(() => {
+        if (typeof window !== 'undefined') {
+            audioRef.current = new Audio();
+        }
+
         const audio = audioRef.current;
 
         const handleAudioEnd = () => {
             console.log('Audio has ended');
-            setCurrentTrackIndex(prevIndex => (prevIndex + 1));
+            playNextTrack();
         };
 
-
         const handleTimeUpdate = () => {
-            setCurrentTime(audio.currentTime);
+            if (audio) setCurrentTime(audio.currentTime);
         };
 
         const handleLoadedMetadata = () => {
-            setDuration(audio.duration);
+            if (audio) setDuration(audio.duration);
         };
 
-        audio.addEventListener('ended', handleAudioEnd);
-        audio.addEventListener('timeupdate', handleTimeUpdate);
-        audio.addEventListener('loadedmetadata', handleLoadedMetadata);
+        if (audio) {
+            audio.addEventListener('ended', handleAudioEnd);
+            audio.addEventListener('timeupdate', handleTimeUpdate);
+            audio.addEventListener('loadedmetadata', handleLoadedMetadata);
+        }
 
         return () => {
-            audio.removeEventListener('ended', handleAudioEnd);
-            audio.removeEventListener('timeupdate', handleTimeUpdate);
-            audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
+            if (audio) {
+                audio.removeEventListener('ended', handleAudioEnd);
+                audio.removeEventListener('timeupdate', handleTimeUpdate);
+                audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
+            }
         };
     }, []);
 
     const playNextTrack = () => {
-        setCurrentTrackIndex(prevIndex => {
-            const nextIndex = prevIndex >= 0 ? (prevIndex + 1) % musicIds.length : 0;
-            console.log('Playing next track:', nextIndex);
-            return nextIndex;
-        });
+        setCurrentTrackIndex(prevIndex => prevIndex + 1)
     };
 
     const playPreviousTrack = () => {
@@ -62,15 +64,16 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId }) => {
 
     const playMusic = (trackIndex: number) => {
         const audio = audioRef.current;
-        if (trackIndex >= 0 && trackIndex < musicIds.length) {
+        if (trackIndex >= 0 && trackIndex < musicIds.length && audio) {
             const currentMusicId = musicIds[trackIndex];
-            console.log('current index:', currentTrackIndex);
-
             console.log('Playing music with ID:', currentMusicId);
             audio.src = String(music.getMusic(currentMusicId));
             audio.play().catch(error => {
                 console.error('Error playing music:', error);
             });
+        } else if (trackIndex >= musicIds.length) {
+            console.error('Track index out of bounds:', trackIndex);
+            setCurrentTrackIndex(0);
         } else {
             console.error('Invalid track index:', trackIndex);
         }
@@ -91,22 +94,16 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId }) => {
     useEffect(() => {
         if (isSongPlaying && currentTrackIndex !== -1) {
             playMusic(currentTrackIndex);
-        } if (currentTrackIndex === 12) {
-            console.log('Current track index:', currentTrackIndex);
-            console.log('now setting current track index to 0');
-
-            setCurrentTrackIndex(0)
-            console.log('Current track index:', currentTrackIndex);
-
-
         }
     }, [isSongPlaying, currentTrackIndex]);
 
     const handleSeek = (event: React.ChangeEvent<HTMLInputElement>) => {
         const audio = audioRef.current;
         const newTime = parseFloat(event.target.value);
-        audio.currentTime = newTime;
-        setCurrentTime(newTime);
+        if (audio) {
+            audio.currentTime = newTime;
+            setCurrentTime(newTime);
+        }
     };
 
     return (
