@@ -22,7 +22,7 @@ function RightDropdownMenu() {
             {
                 !isUserLogin
                     ?
-                    <div>login</div>
+                    <div><Link href={'/users/login'}>logIn</Link></div>
                     :
                     <DropdownMenu>
                         <DropdownMenuTrigger className='cursor-pointer' asChild>
