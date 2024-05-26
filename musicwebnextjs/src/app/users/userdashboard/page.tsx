@@ -26,11 +26,11 @@ const UserDashboard: React.FC = () => {
     const [isMyDashboard, setIsMyDashboard] = useState(true);
     const router = useRouter();
     const { isUserLogin, currentUser, userPrefs } = useAuth();
-    const searchParams = useSearchParams();
+    const searchParams = new URLSearchParams(window.location.search);
     const IdInUrl = cryptoUtil.decryptString(searchParams.get('userId') || '');
     const encryptedUserId = cryptoUtil.encryptString(currentUser?.$id);
 
-//avatar is not changed based on the user id make it later
+    //avatar is not changed based on the user id make it later
 
 
     useEffect(() => {

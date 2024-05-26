@@ -12,12 +12,20 @@ import PageUi from '@/components/page/pageui';
 
 function Page() {
     const urlParams = useSearchParams();
-    const playListId = cryptoUtil.decryptString(urlParams.get('id')!);
+    const [playListId, setPlayListId] = useState<string>('');
     const [musicDetails, setMusicDetails] = useState<any>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const { setIsSongPlaying, isUserLogin } = useAuth()
     const [id, setId] = useState('');
+
+
+    useEffect(() => {
+        if (urlParams) {
+            const playListId = cryptoUtil.decryptString(urlParams.get('id') as string);
+            setPlayListId(playListId);
+        }
+    }, [urlParams]);
 
     useEffect(() => {
         const getSongsFromPlayList = async () => {
