@@ -56,7 +56,7 @@ const UserDashboard: React.FC = () => {
     }, [IdInUrl, currentUser, userPrefs]);
 
     return (
-        <PageUi >
+        <PageUi className='flex flex-col items-center justify-center' >
             {!isMyDashboard && (
                 <Link
                     href={`/users/userdashboard?userId=${encryptedUserId}`}

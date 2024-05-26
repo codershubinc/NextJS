@@ -7,23 +7,54 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"  
+} from "@/components/ui/dropdown-menu"
+import { useAuth } from '@/context/AuthContext'
+import userAvatarDBConfig from '@/config/dataBase/userPrefs/userAvatarDBConfig'
+import Link from 'next/link'
+import cryptoUtil from '@/lib/util/CryptoUtil'
+import LogOutBtn from '../Buttons/LogOutBtn'
 
 
 function RightDropdownMenu() {
+    const { userPrefs, isUserLogin } = useAuth()
     return (
-        <DropdownMenu>
-            <DropdownMenuTrigger>open</DropdownMenuTrigger>
-            <DropdownMenuContent>
-                <DropdownMenuItem>Item 1</DropdownMenuItem>
-                <DropdownMenuItem>Item 2</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuLabel>Section</DropdownMenuLabel>
-                <DropdownMenuItem>Submenu item 1</DropdownMenuItem>
-                <DropdownMenuItem>Submenu item 2</DropdownMenuItem> 
-            </DropdownMenuContent>
-        </DropdownMenu>
+        <div>
+            {
+                !isUserLogin
+                    ?
+                    <div>login</div>
+                    :
+                    <DropdownMenu>
+                        <DropdownMenuTrigger className='cursor-pointer' asChild>
+                            <img
+                                src={String(userAvatarDBConfig.getUserAvatarPreviewWithPrefs(userPrefs.avatar))}
+                                alt="User"
+                                className='w-[40px] h-[40px] rounded-full'
+                            />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            <DropdownMenuItem>
+                                <Link
+                                    href={'/users/userdashboard?userId=' + cryptoUtil.encryptString(String(userPrefs?.$id))}
+                                >
+                                    Dashboard
+                                </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                                <Link href={'/'} > View All PlayLists </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuLabel>Section</DropdownMenuLabel>
+                            <DropdownMenuItem>Submenu item 1</DropdownMenuItem>
+                            <DropdownMenuItem>
+                                {isUserLogin ?
+                                    <LogOutBtn className='' path='/users/login' /> :
+                                    <Link href={'/users/login'}>logIn</Link>}
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu >
+            }
+        </div>
     )
 }
-
 export default RightDropdownMenu
