@@ -1,31 +1,28 @@
 'use client';
 import musicPlayList from '@/config/dataBase/playListsDb/musicPlayList';
+import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 function AddMusicToPlayList() {
     const { register, handleSubmit, setValue } = useForm();
-    const [done, setDone] = useState(false);
+    const urlParams = useSearchParams();
+    const [done, setDone] = useState(false)
 
     useEffect(() => {
-        const params = new URLSearchParams(window.location.search);
-        const musicId = params.get('musicId');
-        const playListId = params.get('playListId');
-        
-        if (musicId) setValue('musicId', musicId);
-        if (playListId) setValue('playListId', playListId);
-    }, [setValue]);
+        setValue('musicId', urlParams.get('musicId'));
+        setValue('playListId', urlParams.get('playListId'));
+    }, [urlParams, setValue]);
 
     const addMusicToPlayList = async (data: any) => {
         try {
             const result = await musicPlayList.getMusicPlayListOne(data.playListId);
-            const id = data.playListId;
 
+            const id = data.playListId;
             if (result) {
                 console.log(result);
                 console.log(result.musicContains);
                 const musicContains = [...result.musicContains, data.musicId];
-
                 try {
                     const result = await musicPlayList.updateMusicPlayList({ id, musicContains });
                     setDone(true);
@@ -36,6 +33,7 @@ function AddMusicToPlayList() {
             }
         } catch (error) {
             console.log('Error:', error);
+
         }
     };
 
@@ -44,32 +42,26 @@ function AddMusicToPlayList() {
             <h1 className="text-2xl font-bold mb-4">Add Music To PlayList</h1>
             <form onSubmit={handleSubmit(addMusicToPlayList)} className="w-full max-w-sm space-y-4">
                 <div className="flex flex-col">
-                    <label className="mb-1 font-semibold">
-                        Playlist ID 
-                        <p className="text-red-500 text-sm">check your playlist id from url</p>
-                    </label>
+                    <label className="mb-1 font-semibold">Playlist ID <p className="text-red-500 text-sm" >check your playlist id from url</p> </label>
                     <input
                         type="text"
                         placeholder="Enter Playlist ID"
                         readOnly
-                        value={new URLSearchParams(window.location.search).get('playListId') || ''}
+                        value={String(urlParams.get('playListId'))}
                         className="p-2 border border-gray-300 rounded cursor-not-allowed"
                     />
                 </div>
                 <div className="flex flex-col">
-                    <label className="mb-1 font-semibold">
-                        Music ID 
-                        <p className="text-red-500 text-sm">check your music id from url</p>
-                    </label>
+                    <label className="mb-1 font-semibold">Music ID <p className="text-red-500 text-sm" >check your music id from url</p> </label>
                     <input
                         type="text"
                         placeholder="Enter Music ID"
+                        value={String(urlParams.get('musicId'))}
                         readOnly
-                        value={new URLSearchParams(window.location.search).get('musicId') || ''}
                         className="p-2 border border-gray-300 rounded cursor-not-allowed"
                     />
                 </div>
-                <button disabled={done} type="submit" className={"px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 " + (done ? "cursor-not-allowed" : "")}>
+                <button disabled={done} type="submit" className={"px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600  " + (done ? "cursor-not-allowed" : "")}>
                     Submit
                 </button>
                 {done && <p className="text-green-500">Done ... go back and upload new music</p>}
