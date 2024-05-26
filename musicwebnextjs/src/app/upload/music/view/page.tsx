@@ -13,11 +13,11 @@ function Page() {
     const musicId = searchParams.get('musicId') || '';
     const [musicInfo, setMusicInfo] = useState<any>({});
     const [musicUrl, setMusicUrl] = useState<string | null>(null);
+    const [isPlaying, setIsPlaying] = useState(false);
     const [newMusic] = useState(new Audio());
 
     useEffect(() => {
         const getMusicInfo = async () => {
-            console.log('Fetching music info...');
             try {
                 const result = await musicConfig.getMusicConfig(musicId);
                 if (result) {
@@ -36,12 +36,10 @@ function Page() {
 
     useEffect(() => {
         const fetchMusicPreview = async () => {
-            console.log('Fetching music preview...');
             try {
                 if (musicInfo.musicId) {
                     const previewUrl = music.getMusic(musicInfo.musicId);
                     setMusicUrl(previewUrl.href);
-                    handlePlayMusic(previewUrl.href);
                 }
             } catch (error) {
                 console.error('Error fetching music preview:', error);
@@ -52,11 +50,23 @@ function Page() {
         }
     }, [musicInfo]);
 
-    const handlePlayMusic = (url?: string) => {
-        const playUrl = url || musicUrl;
-        if (playUrl) {
-            console.log('Playing music URL:', playUrl);
-            newMusic.src = playUrl;
+    useEffect(() => {
+        if (isPlaying) {
+            handlePlayMusic();
+        } else {
+            newMusic.pause();
+            newMusic.currentTime = 0;
+        }
+        // Cleanup
+        return () => {
+            newMusic.pause();
+            newMusic.currentTime = 0;
+        };
+    }, [isPlaying]);
+
+    const handlePlayMusic = () => {
+        if (musicUrl) {
+            newMusic.src = musicUrl;
             newMusic.play().catch((error) => {
                 console.error('Error playing music:', error);
             });
@@ -69,10 +79,10 @@ function Page() {
         <PageUi>
             <div className="flex flex-col items-center justify-center p-4">
                 <button
-                    onClick={() => handlePlayMusic()}
-                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mb-4"
+                    onClick={() => setIsPlaying(!isPlaying)}
+                    className={`px-4 py-2 bg-${isPlaying ? 'red' : 'blue'}-500 text-white rounded hover:bg-${isPlaying ? 'red' : 'blue'}-600 mb-4`}
                 >
-                    Play
+                    {isPlaying ? 'Stop' : 'Play'}
                 </button>
                 {musicInfo.musicAvatar && (
                     <img
