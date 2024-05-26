@@ -1,4 +1,3 @@
-'use client';
 import React, { useEffect, useRef, useState } from 'react';
 import music from '@/config/dataBase/playListsDb/music';
 import { useAuth } from '@/context/AuthContext';
@@ -6,13 +5,15 @@ import { useAuth } from '@/context/AuthContext';
 interface Props {
     musicIds: string[];
     playMusicWithId: string;
+    allMusicInfo: any;
 }
 
-const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId }) => {
-    const [currentTrackIndex, setCurrentTrackIndex] = useState( -1);
+const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo }) => {
+    const [currentTrackIndex, setCurrentTrackIndex] = useState(-1);
     const [currentTime, setCurrentTime] = useState<number>(0);
     const [duration, setDuration] = useState<number>(0);
     const audioRef = useRef<HTMLAudioElement | null>(null);
+    const [currentSongInfo, setCurrentSongInfo] = useState<any>({});
     const { isSongPlaying } = useAuth();
 
     useEffect(() => {
@@ -52,6 +53,7 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId }) => {
 
     const playNextTrack = () => {
         setCurrentTrackIndex(prevIndex => prevIndex + 1)
+        console.log('Playing next track:', currentTrackIndex + 1);
     };
 
     const playPreviousTrack = () => {
@@ -66,6 +68,8 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId }) => {
         const audio = audioRef.current;
         if (trackIndex >= 0 && trackIndex < musicIds.length && audio) {
             const currentMusicId = musicIds[trackIndex];
+            setCurrentSongInfo(allMusicInfo[currentTrackIndex]);
+            console.log('Current song info:', currentSongInfo);
             console.log('Playing music with ID:', currentMusicId);
             audio.src = String(music.getMusic(currentMusicId));
             audio.play().catch(error => {
@@ -74,6 +78,7 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId }) => {
         } else if (trackIndex >= musicIds.length) {
             console.error('Track index out of bounds:', trackIndex);
             setCurrentTrackIndex(0);
+
         } else {
             console.error('Invalid track index:', trackIndex);
         }
@@ -82,9 +87,12 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId }) => {
     useEffect(() => {
         if (playMusicWithId) {
             const trackIndex = musicIds.indexOf(playMusicWithId);
+
             if (trackIndex !== -1) {
                 console.log('Setting initial track index:', trackIndex);
                 setCurrentTrackIndex(trackIndex);
+                setCurrentSongInfo(allMusicInfo[trackIndex]);
+                console.log('Current song info:', currentSongInfo);
             } else {
                 console.error('Track ID not found in musicIds:', playMusicWithId);
             }
@@ -94,6 +102,9 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId }) => {
     useEffect(() => {
         if (isSongPlaying && currentTrackIndex !== -1) {
             playMusic(currentTrackIndex);
+            setCurrentSongInfo(allMusicInfo[currentTrackIndex]);
+            console.log('Current song info:', currentSongInfo);
+
         }
     }, [isSongPlaying, currentTrackIndex]);
 
@@ -120,6 +131,7 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId }) => {
                 onChange={handleSeek}
                 style={{ width: '100%' }}
             />
+            {currentSongInfo.musicName}
             <div>
                 {Math.floor(currentTime / 60)}:{('0' + Math.floor(currentTime % 60)).slice(-2)} /
                 {Math.floor(duration / 60)}:{('0' + Math.floor(duration % 60)).slice(-2)}

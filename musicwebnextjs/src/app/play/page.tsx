@@ -89,7 +89,7 @@ function Page() {
                         ))}
                     </div>
                 )}
-                <MusicPlayer musicIds={musicIds} playMusicWithId={id} />
+                <MusicPlayer musicIds={musicIds} playMusicWithId={id} allMusicInfo={musicDetails} />
             </div>
         </PageUi>
     );
