@@ -131,7 +131,7 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
                 onChange={handleSeek}
                 style={{ width: '100%' }}
             />
-            {currentSongInfo.musicName}
+            {currentSongInfo?.musicName}
             <div>
                 {Math.floor(currentTime / 60)}:{('0' + Math.floor(currentTime % 60)).slice(-2)} /
                 {Math.floor(duration / 60)}:{('0' + Math.floor(duration % 60)).slice(-2)}
