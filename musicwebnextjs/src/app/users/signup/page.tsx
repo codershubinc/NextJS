@@ -1,12 +1,12 @@
 'use client'
-import React, { useState } from 'react'
+import React  from 'react'
 import PageUi from '@/components/page/pageui'
-import { useAuth } from '@/context/AuthContext'
+import  {useAuth}  from '@/context/AuthContext'
 import SignUpForm from './signUpForm'
 import Link from 'next/link'
 
-const { isUserLogin } = useAuth()
 function page() {
+    const { isUserLogin } = useAuth();
 
     if (isUserLogin) {
         return <PageUi
