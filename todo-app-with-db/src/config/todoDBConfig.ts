@@ -54,7 +54,11 @@ export class TodoDBConfig {
             return await this.databases.listDocuments(
                 conf.appwriteDatabaseId,
                 conf.appwriteTodoCollectionId,
-                [Query.equal("todoByUser", id)]
+                [
+                    Query.equal('todoByUser', id),
+                    Query.orderDesc('$createdAt')
+
+                ]
             )
         } catch (error) {
             throw error
