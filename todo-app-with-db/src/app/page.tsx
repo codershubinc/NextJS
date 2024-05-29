@@ -37,7 +37,7 @@ export default function Home() {
 
   // Log the todo titles whenever allTodoDocs changes
   useEffect(() => {
-    console.log('allTodoDocs', allTodoDocs.map((todo: any) => todo.todoTitle));
+    console.log('allTodoDocs', allTodoDocs)
   }, [allTodoDocs]);
 
   if (loading) {
@@ -69,7 +69,7 @@ export default function Home() {
                   key={todo.$id}
                   todoTitle={todo.todoTitle}
                   todoMessage={todo.todoMessage}
-                  todoDate={todo.$createdAt.split('T')[0].split('-').reverse().join('/')}
+                  todoDate={todo.date}
                   todoCompleted={todo.$id}
                 />
               ))

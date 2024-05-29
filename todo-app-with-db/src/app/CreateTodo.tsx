@@ -40,6 +40,8 @@ function CreateTodo({ todo, display }: CreateTodoProps) {
             console.log('user', user);
 
             if (todo) {
+                console.log('todo found', todo);
+                
                 console.log('todo', todo);
                 console.log('data', data);
                 const updateTodo = await todoDBConfig.updateTodo(todo.$id, {
@@ -54,11 +56,17 @@ function CreateTodo({ todo, display }: CreateTodoProps) {
 
                 // Update existing todo logic here
             } else {
+                console.log('todo not found', todo);
+                
                 console.log('data', data);
+                const date = new Date().setUTCDate;
+                console.log('date', date);
+                
 
                 const newTodo = await todoDBConfig.createTodo({
                     ...data,
-                    todoByUser: user.$id
+                    todoByUser: user.$id,
+                    date: String(date)
                 });
                 console.log('todo', newTodo);
 
@@ -80,10 +88,10 @@ function CreateTodo({ todo, display }: CreateTodoProps) {
                 <h2 className='text-2xl text-center'>{todo ? 'Update Todo' : 'Create Todo'}</h2>
                 {/* //cancel button for update */}
                 {todo ? <Link href='/'>
-                        <Button variant="outline" className=' absolute right-0 top-0  mt-3'>
-                            ❌
-                        </Button>
-                    </Link>
+                    <Button variant="outline" className=' absolute right-0 top-0  mt-3'>
+                        ❌
+                    </Button>
+                </Link>
                     : ''}
                 <div className="grid w-full max-w-sm items-center gap-1.5">
                     <Label htmlFor="todoTitle">Todo Title</Label>
