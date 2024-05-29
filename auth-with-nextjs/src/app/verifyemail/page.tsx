@@ -9,8 +9,10 @@ export default function Page() {
   const [token, setToken] = useState('')
   const [error, setError] = useState(null)
   const [isVerified, setIsVerified] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const verifyUserEmail = async () => {
+    setLoading(true)
     try {
       await axios.post('/api/users/verifyemail', { token })
       setIsVerified(true)

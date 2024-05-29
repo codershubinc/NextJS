@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 
 export default function ProfilePage() {
     const router = useRouter()
-    const [data, setData] = useState("nothing")
+    const [data, setData] = useState<any>()
     const logout = async () => {
 
         try {
@@ -28,7 +28,9 @@ export default function ProfilePage() {
 
             const res = await axios.get('/api/users/me')
             console.log(res.data);
-            setData(res.data.data._id)
+            setData(res.data.data)
+            console.log('data', res.data.data);
+
         } catch (error: any) {
             console.log(error.message);
 
@@ -40,8 +42,12 @@ export default function ProfilePage() {
             <h1>Profile</h1>
             <hr />
             <p>Profile page</p>
-            <h2 className="p-1 rounded bg-green-500">{data === 'nothing' ? "Nothing" : <Link href={`/profile/${data}`}>{data}
-            </Link>}</h2>
+            {data?.isVerified ? `userVerified` : `not verified`}
+            <h2
+                className="p-1 rounded bg-green-500">
+                {data?.username ? <Link href={`/profile/${data?.username}`}>{data?.username}</Link> : "Nothing"}
+
+            </h2>
             <hr />
             <button
                 onClick={logout}

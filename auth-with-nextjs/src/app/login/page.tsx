@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "react-hot-toast";
@@ -11,6 +11,7 @@ import { toast } from "react-hot-toast";
 
 export default function LoginPage() {
   const router = useRouter();
+  const [error, setError] = useState(null);
   const [user, setUser] = React.useState({
     email: "",
     password: "",
@@ -28,7 +29,9 @@ export default function LoginPage() {
       toast.success("Login success");
       router.push("/profile");
     } catch (error: any) {
-      console.log("Login failed", error.message);
+      console.log("Login failed", error);
+      console.log("Login failed", error.response.data.error);
+      setError(error.response.data.error);
       toast.error(error.message);
     } finally {
       setLoading(false);
@@ -46,6 +49,9 @@ export default function LoginPage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       <h1>{loading ? "Processing" : "Login"}</h1>
+      <h1> {error ? error : ``}</h1>
+      {(error === 'Please verify your email') ? <Link className="text-blue-500" href="/sendEmail">send verification email</Link> : ``
+      }
       <hr />
 
       <label htmlFor="email">email</label>
@@ -70,7 +76,7 @@ export default function LoginPage() {
         onClick={onLogin}
         className="p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600">Login here</button>
       <Link href="/signup">Visit Signup page</Link>
-    </div>
+    </div >
   )
 
 }   
