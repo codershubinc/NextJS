@@ -61,7 +61,7 @@ export default function Home() {
         </div>
         <div>
           <div
-            className="flex flex-wrap gap-1  mt-9 px-1 overflow-y-auto items-center  h-[90vh] lg:h-full  "
+            className="flex flex-wrap   h-[90vh]    "
           >
             {allTodoDocs.length > 0 ? (
               allTodoDocs.map((todo) => (
