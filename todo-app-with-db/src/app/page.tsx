@@ -68,7 +68,7 @@ export default function Home() {
                 <CardComp
                   key={todo.$id}
                   todoTitle={todo.todoTitle}
-                  todoMessage={todo.todoMessage}
+                  todoMessage={todo.todoMessage.replace(/(?:\r\n|\r|\n)/g, '<br>')}
                   todoDate={todo.date}
                   todoCompleted={todo.$id}
                 />
