@@ -35,7 +35,7 @@ const CardComp: React.FC<CardCompProps> = ({
                 <CardTitle>{todoTitle}</CardTitle>
             </CardHeader>
             <CardContent>
-                <p>{todoMessage}</p>
+                <div dangerouslySetInnerHTML={{__html:todoMessage}}/>
             </CardContent>
             <CardFooter >
                 <CardDescription>Created at {todoDate}</CardDescription>
