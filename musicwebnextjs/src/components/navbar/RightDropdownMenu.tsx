@@ -29,7 +29,8 @@ function RightDropdownMenu() {
                     <DropdownMenu>
                         <DropdownMenuTrigger className='cursor-pointer' asChild>
                             <img
-                                src={userPrefs.avatar ? String(userAvatarDBConfig.getUserAvatarPreviewWithPrefs(userPrefs?.avatar)): String(ifNotUserAvatar.getUserInitials())}
+                                src={userPrefs.avatar ? 
+                                    String(userAvatarDBConfig.getUserAvatarPreviewWithPrefs(userPrefs?.avatar , 50)): String(ifNotUserAvatar.getUserInitials())}
                                 alt="User"
                                 className='w-[40px] h-[40px] rounded-full'
                             />
