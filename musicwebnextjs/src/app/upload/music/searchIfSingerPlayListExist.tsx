@@ -19,14 +19,14 @@ const SearchIfSingerPlayListExist = () => {
         }
 
         try {
-            const results = await musicPlayList.getMusicPlayList(queries);
-            setSearchResults(results.documents);
-            console.log('Search results:', results.documents);
+            const results = await musicPlayList.getMusicPlayList(searchQuery);
+            setSearchResults(results?.documents);
+            console.log('Search results:', results?.documents);
 
         } catch (error) {
             console.error('Error searching music playlists:', error);
         }
-        if (searchResults.length < 0) {
+        if (searchResults?.length < 0) {
             console.log('No results found');
 
         }
@@ -46,7 +46,7 @@ const SearchIfSingerPlayListExist = () => {
             </div>
             <Button onClick={handleSearch}>Search</Button>
 
-            {searchResults.length > 0 && (
+            {searchResults?.length > 0 && (
                 <div>
                     <h2>Search Results:</h2>
                     <ul>

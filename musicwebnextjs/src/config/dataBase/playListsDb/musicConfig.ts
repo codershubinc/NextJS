@@ -36,7 +36,8 @@ export class MusicConfig {
         hashTags,
         likeId,
         like,
-        language
+        language,
+        musicUri
     }: {
         musicName: string
         musicId: string
@@ -47,12 +48,13 @@ export class MusicConfig {
         likeId: any
         like: number
         language: string
+        musicUri: string
     }) {
         try {
             return await this.databases.createDocument(
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionMusicConfigId,
-                musicId,
+                ID.unique(),
                 {
                     musicName,
                     musicId,
@@ -62,7 +64,8 @@ export class MusicConfig {
                     hashTags,
                     likeId,
                     like,
-                    language
+                    language,
+                    musicUri
                 }
             )
         } catch (error) {

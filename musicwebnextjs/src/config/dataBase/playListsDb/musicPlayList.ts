@@ -58,17 +58,16 @@ export class MusicPlayList {
         }
     }
 
-    async getMusicPlayList(queries: { queryType: string; queryName: string }[]): Promise<any> {
+    async getMusicPlayList(searchQuery: string): Promise<any> {
         try {
-            const queryObjects = queries.map((query) =>
-                Query.equal(query.queryType, query.queryName)
-            );
-            console.log("queryObjects", queryObjects);
+
 
             return await this.databases.listDocuments(
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionMusicPlayListId,
-                queryObjects
+                [
+                    Query.search('name', searchQuery),
+                ]
             );
         } catch (error) {
             console.error("Appwrite service :: getMusicPlayList :: error", error);

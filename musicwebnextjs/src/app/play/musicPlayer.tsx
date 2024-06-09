@@ -69,11 +69,17 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
     const playMusic = (trackIndex: number) => {
         const audio = audioRef.current;
         if (trackIndex >= 0 && trackIndex < musicIds.length && audio) {
-            const currentMusicId = musicIds[trackIndex];
+
             setCurrentSongInfo(allMusicInfo[currentTrackIndex]);
-            console.log('Current song info:', currentSongInfo);
+            console.log('Current song info at play music func:', allMusicInfo[trackIndex]);
+
+            const currentMusicId = ( allMusicInfo[trackIndex].musicId ?
+                String(music.getMusic(allMusicInfo[trackIndex].musicId)) :
+                String(allMusicInfo[trackIndex].musicUri)
+            );
+
             console.log('Playing music with ID:', currentMusicId);
-            audio.src = String(music.getMusic(currentMusicId));
+            audio.src = currentMusicId;
             audio.play().catch(error => {
                 console.error('Error playing music:', error);
             });
@@ -163,7 +169,7 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
         };
 
         if ('mediaSession' in navigator) {
-            const musicAvatarUrl = userAvatarDBConfig.getUserAvatarPreviewWithPrefs(currentSongInfo.musicAvatar);
+            const musicAvatarUrl = userAvatarDBConfig.getUserAvatarPreviewWithPrefs(currentSongInfo.musicAvatar, 512);
             console.log('music avatar url', musicAvatarUrl.href);
 
             console.log('currentSongInfo', currentSongInfo);

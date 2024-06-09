@@ -10,7 +10,7 @@ import music from '@/config/dataBase/playListsDb/music';
 import musicConfig from '@/config/dataBase/playListsDb/musicConfig';
 import userAvatarDBConfig from '@/config/dataBase/userPrefs/userAvatarDBConfig';
 import { useRouter } from 'next/navigation';
-import cryptoUtil from '@/lib/util/CryptoUtil';
+import { ID } from 'appwrite';
 import {
     Select,
     SelectContent,
@@ -37,28 +37,31 @@ const MusicUploadForm = ({ className }: { className: string }) => {
         setLoading(true);
         try {
             // Upload music file
-            const musicFile = data.music[0];
-            const musicResponse = await music.uploadMusic(musicFile);
-            console.log('Music File uploaded:', musicResponse);
+            // const musicFile = data.music[0];
+            // const musicResponse = await music.uploadMusic(musicFile);
+            // console.log('Music File uploaded:', musicResponse);
 
-            const musicFileId = musicResponse.$id;
+            // const musicFileId = musicResponse.$id;
 
             // Upload avatar file
-            const avatarFile = data.musicAvatar
-            console.log('Avatar File uploaded:', avatarFile);
-            const avatarFileId = avatarFile;
+            // const avatarFile = data.musicAvatar || ''
+            // console.log('Avatar File uploaded:', avatarFile);
+            // const avatarFileId = avatarFile;
 
             // Create document in database
+            console.log('musicUrl:', data.musicUrl);
+
             const result = await musicConfig.createMusicConfig({
                 musicName: data.musicName,
-                musicId: musicFileId,
-                musicAvatar: avatarFileId,
+                musicId: data.musicId || '',
+                musicAvatar: data.musicAvatar,
                 singer: [...data.singer.split(',').map((s: string) => s.trim())],  // Trim each singer name
                 description: data.description,
                 hashTags: [...data.hashTags.split(',').map((tag: string) => tag.trim())],  // Trim each hashtag
                 likeId: [],
                 like: 0,
-                language: language
+                language: language,
+                musicUri: data.musicUrl,
             });
 
             console.log('Music Data:', result);
@@ -82,16 +85,27 @@ const MusicUploadForm = ({ className }: { className: string }) => {
             <div className='text-3xl font-bold text-center mb-4'>Upload Music</div>
             <form onSubmit={handleSubmit(uploadMusicToDb)} className='flex flex-col items-center gap-3'>
                 <div className='grid w-full max-w-sm items-center gap-1.5'>
-                    <Label htmlFor="music">Music</Label>
+                    <Label htmlFor="music">Music /for now not required</Label>
                     <Input
                         type="file"
                         accept="audio/*"
                         id="music"
                         placeholder="Music"
-                        required
+                        // required
                         {...register('music')}
                     />
                 </div>
+                <div className="grid w-full max-w-sm items-center gap-1.5">
+                    <Label htmlFor="musicName">Music URI</Label>
+                    <Input
+                        type="text"
+                        id="music URI"
+                        placeholder="Music  uri"
+                        required
+                        {...register('musicUrl')}
+                    />
+                </div>
+
                 <div className="grid w-full max-w-sm items-center gap-1.5">
                     <Label htmlFor="musicName">Music Name</Label>
                     <Input
@@ -104,7 +118,7 @@ const MusicUploadForm = ({ className }: { className: string }) => {
                 </div>
 
                 <div className="grid w-full max-w-sm items-center gap-1.5">
-                    <Label htmlFor="musicAvatar">Music Avatar / Upload file</Label>
+                    <Label htmlFor="musicAvatar">Music Avatar / Upload file / Id</Label>
                     <Input
                         type="text"
                         id="musicAvatar"
@@ -161,7 +175,7 @@ const MusicUploadForm = ({ className }: { className: string }) => {
                     <Input
                         type="text"
                         id='PlayListId'
-                        placeholder="Past here PlayListId"
+                        placeholder="Paste here PlayListId"
                         required
                         {...register('PlayListId')}
                     />

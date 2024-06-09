@@ -41,15 +41,13 @@ export class UserAvatarDBConfig {
             avatarId
         )
     }
-    getUserAvatarPreviewWithPrefs(avatarId: string) {
+    getUserAvatarPreviewWithPrefs(avatarId: string, size: number) {
         return this.bucket.getFilePreview(
             conf.appwriteAvatarBucketId,
             avatarId,
-            252, // width (optional)
-            252, // height (optional)
+            size, // width (optional)
+            size, // height (optional)
             ImageGravity.Center, // gravity (optional)
-
-
 
         )
     }
