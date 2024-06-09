@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider"
 import Navbar from '@/components/navbar/Navbar'
 import { AuthProvider } from "@/context/AuthContext";
+import Head from "next/head";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,10 +22,13 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-     
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+
       <AuthProvider>
         <body className={`${inter.className} `}>
-        
+
           <ThemeProvider
             attribute="class"
             defaultTheme="system"

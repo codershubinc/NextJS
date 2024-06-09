@@ -30,10 +30,11 @@ const UserDashboard: React.FC = () => {
     const IdInUrl = cryptoUtil.decryptString(searchParams.get('userId') || '');
     const encryptedUserId = cryptoUtil.encryptString(currentUser?.$id);
 
-//avatar is not changed based on the user id make it later
+    //TODO: avatar is not changed based on the user id from url so make it later
 
 
     useEffect(() => {
+
         const fetchUser = async () => {
             try {
                 if (IdInUrl === currentUser?.$id) {
@@ -51,6 +52,8 @@ const UserDashboard: React.FC = () => {
                 console.error('Error fetching user:', error);
             }
         };
+        console.log('id in url:', IdInUrl);
+        
 
         fetchUser();
     }, [IdInUrl, currentUser, userPrefs]);
@@ -66,11 +69,11 @@ const UserDashboard: React.FC = () => {
                 </Link>
             )}
             <div
-                className='flex flex-col items-center justify-center w-max'
+                className='flex flex-col items-center   w-max'
             >
-                <UserAvatar />
                 {isUserLogin ? (
                     <>
+                        <UserAvatar />
                         <Card
                             className='w-full flex flex-col items-center justify-center  mx-auto'
                         >
@@ -99,7 +102,7 @@ const UserDashboard: React.FC = () => {
                     </>
                 ) : (
                     <Button onClick={() => router.push('/users/login')} variant='outline'>
-                        Log In
+                        Loading
                     </Button>
                 )}
             </div>

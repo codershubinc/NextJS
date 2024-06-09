@@ -1,6 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from 'react';
 import music from '@/config/dataBase/playListsDb/music';
 import { useAuth } from '@/context/AuthContext';
+import userAvatarDBConfig from '@/config/dataBase/userPrefs/userAvatarDBConfig';
 
 interface Props {
     musicIds: string[];
@@ -13,7 +15,7 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
     const [currentTime, setCurrentTime] = useState<number>(0);
     const [duration, setDuration] = useState<number>(0);
     const audioRef = useRef<HTMLAudioElement | null>(null);
-    const [currentSongInfo, setCurrentSongInfo] = useState<any>({});
+    const [currentSongInfo, setCurrentSongInfo] = useState<any>();
     const { isSongPlaying } = useAuth();
 
     useEffect(() => {
@@ -116,12 +118,103 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
             setCurrentTime(newTime);
         }
     };
+    //display current playing music info in control center of device
+    // {
+    //     "musicName": "Deva Deva by ana jaiman",
+    //     "musicAvatar": "6650e1550002df79ad8f",
+    //     "singer": [
+    //         "ana jaiman"
+    //     ],
+    //     "likeId": [],
+    //     "like": 0,
+    //     "hashTags": [
+    //         "ana jaman"
+    //     ],
+    //     "musicId": "665106a7001e9d60a31d",
+    //     "description": "ana jaiman",
+    //     "language": "hi",
+    //     "$id": "665106a7001e9d60a31d",
+    //     "$createdAt": "2024-05-24T21:29:27.753+00:00",
+    //     "$updatedAt": "2024-05-24T21:29:27.753+00:00",
+    //     "$permissions": [
+    //         "read(\"user:664f8d770018e5a137d7\")",
+    //         "update(\"user:664f8d770018e5a137d7\")",
+    //         "delete(\"user:664f8d770018e5a137d7\")"
+    //     ],
+    //     "$databaseId": "664cd502000af31ed320",
+    //     "$collectionId": "664dee810029136d3a58"
+    // }
+
+    useEffect(() => {
+        if (currentSongInfo === undefined) return console.log('currentSongInfo is undefined');
+
+        const handleKeyDown = (event: KeyboardEvent) => {
+            switch (event.key) {
+                case 'MediaTrackPrevious':
+                    playPreviousTrack();
+                    break;
+                case 'MediaTrackNext':
+                    playNextTrack();
+                    break;
+                // Add more cases for other media keys if needed
+                default:
+                    break;
+            }
+        };
+
+        if ('mediaSession' in navigator) {
+            const musicAvatarUrl = userAvatarDBConfig.getUserAvatarPreviewWithPrefs(currentSongInfo.musicAvatar);
+            console.log('music avatar url', musicAvatarUrl.href);
+
+            console.log('currentSongInfo', currentSongInfo);
+            console.log('music avatar id', currentSongInfo?.musicAvatar);
+
+
+            navigator.mediaSession.metadata = new MediaMetadata({
+
+                title: currentSongInfo?.musicName || 'music',
+                artist: currentSongInfo?.singer[0] || 'Singer Name',
+                album: 'Album Name',
+                artwork: [
+                    {
+                        src: musicAvatarUrl.href,
+                        sizes: '512x512',
+                        type: 'image/png',
+                    },
+                ],
+            })
+            // Handling the previous track action here
+
+            navigator.mediaSession.setActionHandler('previoustrack', () => {
+                playPreviousTrack();
+            })
+
+
+
+            // Handling the next track action here
+
+            navigator.mediaSession.setActionHandler('nexttrack', () => {
+                playNextTrack();
+            })
+            // Adding keyboard event listeners
+            document.addEventListener('keydown', handleKeyDown);
+
+        }
+
+
+        // Cleanup: remove event listener on component unmount
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+
+    }, [currentSongInfo]);
+
 
     return (
-        <div>
-            <h1>Music Player</h1>
-            <button onClick={playPreviousTrack}>Previous</button>
-            <button onClick={playNextTrack}>Next</button>
+        <div className={`sm:w-[90%] w-[50] mx-auto sticky  bottom-0 rounded-xl bg-gray-800 p-2 m-2`}>
+
+            <button onClick={playPreviousTrack}>👈</button>
+            <button onClick={playNextTrack}>⏭️</button>
             {/* Seek bar */}
             <input
                 type="range"
@@ -131,10 +224,12 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
                 onChange={handleSeek}
                 style={{ width: '100%' }}
             />
-            {currentSongInfo?.musicName}
-            <div>
-                {Math.floor(currentTime / 60)}:{('0' + Math.floor(currentTime % 60)).slice(-2)} /
-                {Math.floor(duration / 60)}:{('0' + Math.floor(duration % 60)).slice(-2)}
+            <div className="flex flex-row  gap-5">
+                {currentSongInfo?.musicName || 'play your music'}
+                <div>
+                    {Math.floor(currentTime / 60)}:{('0' + Math.floor(currentTime % 60)).slice(-2)} /
+                    {Math.floor(duration / 60)}:{('0' + Math.floor(duration % 60)).slice(-2)}
+                </div>
             </div>
         </div>
     );

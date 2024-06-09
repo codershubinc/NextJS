@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client'
 import ifNotUserAvatar from '@/config/dataBase/userPrefs/ifNotUserAvatar'
 import userAvatarDBConfig from '@/config/dataBase/userPrefs/userAvatarDBConfig'
@@ -7,28 +8,33 @@ import React, { useEffect, useState } from 'react'
 function UserAvatar() {
     const [userAvatar, setUserAvatar] = useState<any>()
     const { userPrefs } = useAuth()
-    useEffect(() => {
-        const getUserAvatar = () => {
-            if (userPrefs.avatar) {
-                const result = userAvatarDBConfig.getUserAvatarPreview(userPrefs.avatar)
-                setUserAvatar(result)
-            } else {
-                const result = ifNotUserAvatar.getUserInitials()
-                setUserAvatar(result)
-            }
+    // useEffect(() => {
+    //     const getUserAvatar = () => {
+    //         if (userPrefs.avatar) {
+    //             const result =
+    //                 setUserAvatar(result)
+    //         } else {
+    //             const result =
+    //                 setUserAvatar(result)
+    //         }
 
-        }
+    //     }
 
-        getUserAvatar()
+    //     getUserAvatar()
 
-    }, [userPrefs])
+    // }, [userPrefs])
 
     return (
         <div>
             <img
-                src={userAvatar}
+                src={
+                    userPrefs.avatar ?
+                        String(userAvatarDBConfig.getUserAvatarPreview(userPrefs?.avatar)) :
+                        String(ifNotUserAvatar.getUserInitials())
+                }
+
                 alt=""
-                className='lg:w-96 md:w-96 sm:w-4/5 lg:h-96 md:h-96 sm:h-96   rounded-full object-cover m-2 border-white border-2 border-solid'
+                className='  w-[70vw] h-[30vh]  md:w-[400px] md:h-[400px]  rounded-full object-cover m-2 border-white border-2 border-solid'
             />
         </div>
 

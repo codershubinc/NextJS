@@ -1,4 +1,4 @@
-import { Client, ID, Databases, Storage , ImageFormat , ImageGravity } from "appwrite";
+import { Client, ID, Databases, Storage, ImageFormat, ImageGravity } from "appwrite";
 import conf from "@/conf/conf"
 
 export class UserAvatarDBConfig {
@@ -45,11 +45,11 @@ export class UserAvatarDBConfig {
         return this.bucket.getFilePreview(
             conf.appwriteAvatarBucketId,
             avatarId,
-            30, // width (optional)
-            30, // height (optional)
+            252, // width (optional)
+            252, // height (optional)
             ImageGravity.Center, // gravity (optional)
-        
-           
+
+
 
         )
     }
