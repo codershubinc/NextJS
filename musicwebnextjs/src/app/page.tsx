@@ -12,9 +12,6 @@ export default function Home() {
 
   return (
     <PageUi>
-     
-   
- 
       <ViewAllPlayListsPage />
     </PageUi>
 

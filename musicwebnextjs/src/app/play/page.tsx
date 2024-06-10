@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
 import React, { useEffect, useState } from 'react';
 import musicConfig from '@/config/dataBase/playListsDb/musicConfig';
@@ -6,6 +7,7 @@ import cryptoUtil from '@/lib/util/CryptoUtil';
 import MusicPlayer from './musicPlayer';
 import { useAuth } from '@/context/AuthContext';
 import PageUi from '@/components/page/pageui';
+import userAvatarDBConfig from '@/config/dataBase/userPrefs/userAvatarDBConfig';
 
 function Page() {
     const [playListId, setPlayListId] = useState<string>('');
@@ -14,6 +16,9 @@ function Page() {
     const [error, setError] = useState<string | null>(null);
     const { setIsSongPlaying, isUserLogin } = useAuth();
     const [id, setId] = useState('');
+
+    // currently playing musicPlaylist details
+    const [currentMusicPlaylist, setCurrentMusicPlaylist] = useState<any>();
 
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
@@ -29,6 +34,7 @@ function Page() {
             try {
                 console.log('Fetching playlist with ID:', playListId);
                 const playlist = await musicPlayList.getMusicPlayListOne(playListId);
+                setCurrentMusicPlaylist(playlist);
                 if (playlist) {
                     console.log('Fetched playlist:', playlist);
                     const avatarId = playlist.musicPlayListAvatar;
@@ -77,20 +83,43 @@ function Page() {
                 </div>
             ) : (
                 <div className='w-[]    justify-around items-center '>
-                    <div 
-                    className="flex flex-col w-max mx-auto h-[75vh] bg-slate-900   overflow-auto gap-4 p-2 rounded-3xl  shadow-2xl"
-
+                    <div
+                        className='flex'
                     >
-                        {musicDetails.map((music: any) => (
-                            <div
-                                key={music.$id}
-                                id={music.$id}
-                                onClick={() => playMusic(music.$id)}
-                                className="p-4 flex gap-2 border rounded-xl shadow  bg-white dark:bg-gray-800"
-                            >
-                                <h2 className="text-lg font-semibold">{music.musicName}</h2>
-                            </div>
-                        ))}
+                        <div className=' hidden md:block lg:block  w-[50%] items-center justify-center'>
+
+                            <h1 className="text-2xl font-bold mb-4 text-center">Current Music</h1>
+                            <img
+                                src={
+                                    String
+                                        (
+                                            userAvatarDBConfig.getUserAvatarPreviewWithPrefs(
+                                                currentMusicPlaylist?.musicPlayListAvatar,
+                                                1000
+                                            )
+                                        )
+                                }
+                                alt={currentMusicPlaylist?.musicPlayListName}
+                                className='w-96 h-96 object-cover rounded-3xl mx-auto shadow-lg shadow-white'
+                            />
+                        </div>
+                        {/* music playList songs container */}
+                        <div
+                            className="flex flex-col w-max mx-auto h-[75vh] bg-slate-900   overflow-auto gap-4 p-2 rounded-3xl  shadow-2xl"
+
+                        >
+                            {musicDetails.map((music: any) => (
+                                <div
+                                    key={music.$id}
+                                    id={music.$id}
+                                    onClick={() => playMusic(music.$id)}
+                                    className="p-4 flex gap-2 border rounded-xl shadow  bg-white dark:bg-gray-800"
+                                >
+                                    <h2 className="text-lg font-semibold">{music.musicName}</h2>
+                                </div>
+                            ))}
+                        </div>
+
                     </div>
                     <MusicPlayer musicIds={musicIds} playMusicWithId={id} allMusicInfo={musicDetails} />
                 </div>
