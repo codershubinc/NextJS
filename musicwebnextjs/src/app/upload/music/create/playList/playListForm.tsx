@@ -29,16 +29,19 @@ const MusicPlayListUploadForm = ({ className }: { className: string }) => {
     };
 
     const uploadMusicToDb = async (data: any) => {
+        console.log( 'data:' ,  data);
         setLoading(true);
         let avatarFileId = '';
         let bannerFileId = '';
 
         try {
             // Upload avatar file
-            const avatarFile = data.musicAvatar[0];
-            const avatarResponse = await userAvatarDBConfig.uploadUserAvatar(avatarFile);
-            console.log('Avatar File uploaded:', avatarResponse);
-            avatarFileId = avatarResponse.$id;
+            if (data.musicAvatar && data.musicAvatar) {
+                const avatarFile = data.musicAvatar[0];
+                const avatarResponse = await userAvatarDBConfig.uploadUserAvatar(avatarFile);
+                console.log('Avatar File uploaded:', avatarResponse);
+                avatarFileId = avatarResponse.$id || '';
+            }
 
             // Upload banner file if available
             const bannerFile = data.musicPlayListBanner?.[0];
@@ -58,13 +61,14 @@ const MusicPlayListUploadForm = ({ className }: { className: string }) => {
                 like: 0,
                 musicPlayListAvatar: avatarFileId,
                 musicPlayListBanner: bannerFileId,
-                language: language
+                language: language,
+                musicPlayListAvatarUrl: data.musicPlayListAvatarUrl
             });
 
             if (result) {
                 console.log('Music Data:', result);
 
-                navigate.push('upload/music');
+                // navigate.push('upload/music');
             }
 
             setLoading(false);
@@ -100,17 +104,28 @@ const MusicPlayListUploadForm = ({ className }: { className: string }) => {
                     />
                 </div>
 
-                <div className="grid w-full max-w-sm items-center gap-1.5">
+                {/* <div className="grid w-full max-w-sm items-center gap-1.5">
                     <Label htmlFor="musicAvatar">Music Avatar / Upload file</Label>
                     <Input
                         type="file"
                         id="musicAvatar"
                         accept="image/*"
                         placeholder="Music Avatar"
-                        required
+                        // required
                         {...register('musicAvatar')}
                     />
+                </div> */}
+                <div className="grid w-full max-w-sm items-center gap-1.5">
+                    <Label htmlFor="musicAvatar">Music Avatar Url</Label>
+                    <Input
+                        type="text"
+                        id="musicAvatarUrl"
+                        placeholder="Music AvatarUrl"
+                        // required
+                        {...register('musicPlayListAvatarUrl')}
+                    />
                 </div>
+
 
                 <div className="grid w-full max-w-sm items-center gap-1.5">
                     <Label htmlFor="singer">Singers <p className='text-gray-500 text-sm'>{`('please give in lowercase with comma separated')`}</p> </Label>

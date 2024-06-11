@@ -19,19 +19,21 @@ export class MusicPlayListByUser {
         musicContains,
         playListSingers,
         like,
-        likedId,
+        likeId,
         musicPlayListAvatar,
         musicPlayListBanner,
-        publicPlayList
+        publicPlayList,
+        createdBy
     }: {
         name: string
         musicContains: any
         playListSingers: any
         like: number
-        likedId: any
+        likeId: any
         musicPlayListAvatar: string
         musicPlayListBanner: string
         publicPlayList: boolean
+        createdBy: string
     }) {
         return await this.databases.createDocument(
             conf.appwriteDatabaseId,
@@ -42,10 +44,11 @@ export class MusicPlayListByUser {
                 musicContains,
                 playListSingers,
                 like,
-                likedId,
+                likeId,
                 musicPlayListAvatar,
                 musicPlayListBanner,
-                publicPlayList
+                publicPlayList,
+                createdBy
             }
         )
     }
@@ -70,9 +73,7 @@ export class MusicPlayListByUser {
             conf.appwriteDatabaseId,
             conf.appwriteCollectionPlayListByUserId,
             id,
-            {
-                ...prefs
-            }
+            { musicContains: prefs }
         )
     }
 }

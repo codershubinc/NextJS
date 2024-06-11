@@ -13,6 +13,7 @@ interface Playlists {
     $id: string;
     musicContains: string[];
     musicPlayListAvatar: string;
+    musicPlayListAvatarUrl: string;
     // Add more properties here
 }
 
@@ -67,10 +68,12 @@ function ViewAllPlayListsPage() {
                                         <img
                                             src={
                                                 String
-                                                    (userAvatarDBConfig.getUserAvatarPreviewWithPrefs(
-                                                        playlist.musicPlayListAvatar,
-                                                        1000
-                                                    ))
+                                                    (playlist.musicPlayListAvatar ?
+                                                        userAvatarDBConfig.getUserAvatarPreviewWithPrefs(
+                                                            playlist.musicPlayListAvatar,
+                                                            1000) :
+                                                        playlist.musicPlayListAvatarUrl
+                                                    )
                                             }
                                             alt="playListImg"
                                             className='rounded-xl w-[250px] h-[250px] mb-2  '
@@ -85,7 +88,7 @@ function ViewAllPlayListsPage() {
                 )}
 
             </div>
-                    {/* <Meteors number={5}  /> */}
+            {/* <Meteors number={5}  /> */}
         </PageUi>
     );
 }

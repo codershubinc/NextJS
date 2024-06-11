@@ -56,12 +56,13 @@ const MusicUploadForm = ({ className }: { className: string }) => {
                 musicId: data.musicId || '',
                 musicAvatar: data.musicAvatar,
                 singer: [...data.singer.split(',').map((s: string) => s.trim())],  // Trim each singer name
-                description: data.description,
+                description: data.description || 'song',
                 hashTags: [...data.hashTags.split(',').map((tag: string) => tag.trim())],  // Trim each hashtag
                 likeId: [],
                 like: 0,
                 language: language,
                 musicUri: data.musicUrl,
+                musicAvatarUrl: data.musicAvatarUrl
             });
 
             console.log('Music Data:', result);
@@ -81,7 +82,7 @@ const MusicUploadForm = ({ className }: { className: string }) => {
     };
 
     return (
-        <div className={cn('flex flex-col items-center justify-center', className)}>
+        <div className={cn('flex flex-col items-center justify-center ', className)}>
             <div className='text-3xl font-bold text-center mb-4'>Upload Music</div>
             <form onSubmit={handleSubmit(uploadMusicToDb)} className='flex flex-col items-center gap-3'>
                 <div className='grid w-full max-w-sm items-center gap-1.5'>
@@ -123,8 +124,18 @@ const MusicUploadForm = ({ className }: { className: string }) => {
                         type="text"
                         id="musicAvatar"
                         placeholder="Music Avatar Id"
-                        required
+                        // required
                         {...register('musicAvatar')}
+                    />
+                </div>
+                <div className="grid w-full max-w-sm items-center gap-1.5">
+                    <Label htmlFor="musicAvatar">Music Avatar Url</Label>
+                    <Input
+                        type="text"
+                        id="musicAvatarUrl"
+                        placeholder="Music Avatar URL"
+                        // required
+                        {...register('musicAvatarUrl')}
                     />
                 </div>
 
@@ -144,13 +155,13 @@ const MusicUploadForm = ({ className }: { className: string }) => {
                     <Textarea
                         id="description"
                         placeholder="Description"
-                        required
+                        // required
                         {...register('description')}
                     />
                 </div>
 
                 <div className="grid w-full max-w-sm items-center gap-1.5">
-                    <Label htmlFor="hashTags">HashTags</Label>
+                    <Label htmlFor="hashTags">HashTags (paste all Singers name here)</Label>
                     <Input
                         type="text"
                         id="hashTags"

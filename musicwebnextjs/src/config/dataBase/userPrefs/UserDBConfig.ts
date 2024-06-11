@@ -20,14 +20,12 @@ export class DbConfig {
         name,
         email,
         avatar,
-        playList,
     }: {
         id: string
         avatar: string
         userName: string
         name: string
         email: string
-        playList: any
     }) {
         try {
             return await this.databases.createDocument(
@@ -38,6 +36,7 @@ export class DbConfig {
                     userName,
                     name,
                     email,
+
                 }
             )
 
@@ -68,6 +67,20 @@ export class DbConfig {
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionUserPrefsId,
                 id
+            )
+        } catch (error) {
+            throw error
+        }
+    }
+    async updatePlaylistByUser(id: string, prefs: any) {
+        try {
+            return await this.databases.updateDocument(
+                conf.appwriteDatabaseId,
+                conf.appwriteCollectionUserPrefsId,
+                id,
+                {
+                    ...prefs
+                }
             )
         } catch (error) {
             throw error

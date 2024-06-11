@@ -16,7 +16,8 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
     const [duration, setDuration] = useState<number>(0);
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const [currentSongInfo, setCurrentSongInfo] = useState<any>();
-    const { isSongPlaying } = useAuth();
+    const { isSongPlaying } = useAuth(); 
+    
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -73,7 +74,7 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
             setCurrentSongInfo(allMusicInfo[currentTrackIndex]);
             console.log('Current song info at play music func:', allMusicInfo[trackIndex]);
 
-            const currentMusicId = ( allMusicInfo[trackIndex].musicId ?
+            const currentMusicId = (allMusicInfo[trackIndex].musicId ?
                 String(music.getMusic(allMusicInfo[trackIndex].musicId)) :
                 String(allMusicInfo[trackIndex].musicUri)
             );
@@ -114,6 +115,7 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
             console.log('Current song info:', currentSongInfo);
 
         }
+
     }, [isSongPlaying, currentTrackIndex]);
 
     const handleSeek = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -169,7 +171,12 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
         };
 
         if ('mediaSession' in navigator) {
-            const musicAvatarUrl = userAvatarDBConfig.getUserAvatarPreviewWithPrefs(currentSongInfo.musicAvatar, 512);
+            const musicAvatarUrl =
+                (
+                    currentSongInfo?.musicAvatar ?
+                        userAvatarDBConfig.getUserAvatarPreviewWithPrefs(currentSongInfo.musicAvatar, 500) :
+                        currentSongInfo?.musicAvatarUrl
+                )
             console.log('music avatar url', musicAvatarUrl.href);
 
             console.log('currentSongInfo', currentSongInfo);
@@ -179,12 +186,12 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
             navigator.mediaSession.metadata = new MediaMetadata({
 
                 title: currentSongInfo?.musicName || 'music',
-                artist: currentSongInfo?.singer[0] || 'Singer Name',
+                artist: currentSongInfo?.singer.map((singer: string) => singer.trim()).join(' , ') || 'Singer Name',
                 album: 'Album Name',
                 artwork: [
                     {
-                        src: musicAvatarUrl.href,
-                        sizes: '512x512',
+                        src: String(musicAvatarUrl),
+                        sizes: '500x500',
                         type: 'image/png',
                     },
                 ],
@@ -217,7 +224,7 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
 
 
     return (
-        <div className={`sm:w-[90%] w-[50] mx-auto sticky  bottom-0 rounded-xl bg-gray-800 p-2 m-2`}>
+        <div className={` w-[97%]  mx-auto absolute  bottom-0 left-0 right-0 rounded-xl bg-gray-800 p-2 m-2`}>
 
             <button onClick={playPreviousTrack}>👈</button>
             <button onClick={playNextTrack}>⏭️</button>

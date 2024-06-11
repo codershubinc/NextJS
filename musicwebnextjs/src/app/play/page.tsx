@@ -39,11 +39,19 @@ function Page() {
                 setCurrentMusicPlaylist(playlist);
                 if (playlist) {
                     console.log('Fetched playlist:', playlist);
-                    const avatarId = playlist.musicPlayListAvatar;
-                    const musicDocsResponse = await musicConfig.getMusicConfig(avatarId);
-                    const musicDocs = musicDocsResponse.documents;
-                    console.log('Fetched music documents:', musicDocs);
-                    setMusicDetails(musicDocs);
+                    const avatarId = playlist?.musicPlayListAvatar;
+                    const musicSinger = playlist?.name
+                    if (avatarId) {
+                        const musicDocsResponse = await musicConfig.getMusicConfig(avatarId);
+                        const musicDocs = musicDocsResponse.documents;
+                        console.log('Fetched music documents:', musicDocs);
+                        setMusicDetails(musicDocs);
+                    } else {
+                        const avatar = await musicConfig.getMusicConfigBySingerOne(musicSinger);
+                        const musicDocs = avatar.documents;
+                        console.log('Fetched music documents:', musicDocs);
+                        setMusicDetails(musicDocs);
+                    }
                 } else {
                     setMusicDetails([]);
                 }
@@ -90,7 +98,7 @@ function Page() {
                     Please login to play music
                 </div>
             ) : (
-                <div className='w-[]    justify-around items-center '>
+                <div className=' my-auto mt-3  h-max  justify-around items-center '>
                     <div
                         className='flex'
                     >
@@ -103,11 +111,18 @@ function Page() {
                                 src={
                                     String
                                         (
-                                            userAvatarDBConfig.getUserAvatarPreviewWithPrefs(
-                                                currentMusicPlaylist?.musicPlayListAvatar,
-                                                1000
-                                            )
+                                            String
+                                                (
+                                                    currentMusicPlaylist.musicPlayListAvatar ?
+
+                                                        userAvatarDBConfig.getUserAvatarPreviewWithPrefs(
+                                                            currentMusicPlaylist.musicPlayListAvatar,
+                                                            1000) :
+
+                                                        currentMusicPlaylist.musicPlayListAvatarUrl
+                                                )
                                         )
+
                                 }
                                 alt={currentMusicPlaylist?.musicPlayListName}
                                 className='w-96 h-96 object-cover rounded-3xl mx-auto shadow-lg shadow-white'
@@ -117,7 +132,7 @@ function Page() {
                         {/* music playList songs container */}
 
                         <div
-                            className="flex flex-col w-max mx-auto h-[75vh] bg-slate-900   overflow-auto gap-4 p-2 rounded-3xl  shadow-2xl"
+                            className="flex flex-col w-max mx-auto h-[75vh] border border-solid border-white  bg-[#040303]  overflow-auto gap-4 p-2 rounded-3xl  shadow-2xl"
                         >
                             {musicDetails.map((music: any) => (
 
@@ -125,7 +140,7 @@ function Page() {
                                     key={music.$id}
                                     id={music.$id}
                                     onClick={() => playMusic(music.$id)}
-                                    className="p-4 flex gap-2 border rounded-xl shadow  bg-white dark:bg-gray-800"
+                                    className="p-4 flex gap-2 border rounded-lg shadow  bg-white dark:bg-gray-800"
                                 >
                                     <h2 className="text-lg font-semibold">{music.musicName}</h2>
                                 </div>

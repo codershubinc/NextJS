@@ -24,7 +24,8 @@ export class MusicPlayList {
         likeId,
         musicPlayListAvatar,
         musicPlayListBanner,
-        language
+        language,
+        musicPlayListAvatarUrl
 
     }: {
         name: string
@@ -36,6 +37,7 @@ export class MusicPlayList {
         musicPlayListAvatar: string
         musicPlayListBanner: string
         language: string
+        musicPlayListAvatarUrl: string
     }) {
         try {
             return await this.databases.createDocument(
@@ -50,7 +52,8 @@ export class MusicPlayList {
                     likeId,
                     musicPlayListAvatar,
                     musicPlayListBanner,
-                    language
+                    language,
+                    musicPlayListAvatarUrl
                 }
             )
         } catch (error) {

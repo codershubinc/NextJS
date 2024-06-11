@@ -37,7 +37,8 @@ export class MusicConfig {
         likeId,
         like,
         language,
-        musicUri
+        musicUri,
+        musicAvatarUrl
     }: {
         musicName: string
         musicId: string
@@ -49,6 +50,7 @@ export class MusicConfig {
         like: number
         language: string
         musicUri: string
+        musicAvatarUrl: string
     }) {
         try {
             return await this.databases.createDocument(
@@ -65,7 +67,8 @@ export class MusicConfig {
                     likeId,
                     like,
                     language,
-                    musicUri
+                    musicUri,
+                    musicAvatarUrl
                 }
             )
         } catch (error) {
@@ -79,7 +82,43 @@ export class MusicConfig {
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionMusicConfigId,
                 [
-                    Query.equal('musicAvatar', queryName)
+                    Query.equal('musicAvatar', queryName),
+                    Query.limit(100)
+
+                ]
+
+            )
+        } catch (error) {
+            console.error("Appwrite service :: getMusicConfig :: error", error);
+        }
+    }
+
+    async getMusicConfigBySingerOne(queryName: string): Promise<any> {
+        try {
+            return await this.databases.listDocuments(
+                conf.appwriteDatabaseId,
+                conf.appwriteCollectionMusicConfigId,
+                [
+                    Query.equal('singer', queryName),
+                    Query.limit(100)
+
+
+                ]
+
+            )
+        } catch (error) {
+            console.error("Appwrite service :: getMusicConfig :: error", error);
+        }
+    }
+    async getMusicConfigBy$Id(queryName: any): Promise<any> {
+        try {
+            return await this.databases.listDocuments(
+                conf.appwriteDatabaseId,
+                conf.appwriteCollectionMusicConfigId,
+                [
+                    Query.equal('$id', queryName),
+                    Query.limit(100)
+
 
                 ]
 

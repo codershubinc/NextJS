@@ -11,7 +11,7 @@ function Page() {
                     {/* First search if singer playlist exists */}
                     <SearchIfSingerPlayListExist />
                 </div>
-                <div className="w-full md:w-1/2 lg:w-1/3 xl:w-1/4">
+                <div className="w-full h-max md:w-1/2 lg:w-1/3 xl:w-1/4">
                     {/* Music upload form */}
                     <MusicUploadForm className={" "} />
                 </div>
