@@ -8,6 +8,8 @@ import MusicPlayer from './musicPlayer';
 import { useAuth } from '@/context/AuthContext';
 import PageUi from '@/components/page/pageui';
 import userAvatarDBConfig from '@/config/dataBase/userPrefs/userAvatarDBConfig';
+import { AuroraBackground } from '@/components/ui/aurora-background';
+import { LampContainer } from '@/components/ui/lamp';
 
 function Page() {
     const [playListId, setPlayListId] = useState<string>('');
@@ -49,7 +51,7 @@ function Page() {
                 console.error('Error fetching playlist:', error);
                 setError('Error fetching playlist');
             } finally {
-                setLoading(false);
+                setTimeout(() => setLoading(false), 2000);
             }
         };
 
@@ -68,11 +70,17 @@ function Page() {
     const musicIds = musicDetails.map((music: any) => music.$id);
 
     return (
-        <PageUi className='h-[95vh] w-full lg:pt-10'>
+        // <AuroraBackground
+        //     showRadialGradient={true}
+        // >
 
-            <h1 className="text-2xl font-bold mb-4 text-center">Playlist Details</h1>
+        <PageUi className='h-[95vh] w-full '>
+
+            {/* <h1 className="text-2xl font-bold mb-4 text-center">Playlist Details</h1> */}
             {loading ? (
-                <p>Loading...</p>
+                <LampContainer>
+                    <p>Loading...</p>
+                </LampContainer>
             ) : error ? (
                 <p className="text-red-500">{error}</p>
             ) : musicDetails.length <= 0 ? (
@@ -86,7 +94,9 @@ function Page() {
                     <div
                         className='flex'
                     >
-                        <div className=' hidden md:block lg:block  w-[50%] items-center justify-center'>
+                        <div
+                            className=' hidden md:block lg:block  w-[50%] items-center justify-center  '
+                        >
 
                             <h1 className="text-2xl font-bold mb-4 text-center">Current Music</h1>
                             <img
@@ -103,12 +113,14 @@ function Page() {
                                 className='w-96 h-96 object-cover rounded-3xl mx-auto shadow-lg shadow-white'
                             />
                         </div>
+
                         {/* music playList songs container */}
+
                         <div
                             className="flex flex-col w-max mx-auto h-[75vh] bg-slate-900   overflow-auto gap-4 p-2 rounded-3xl  shadow-2xl"
-
                         >
                             {musicDetails.map((music: any) => (
+
                                 <div
                                     key={music.$id}
                                     id={music.$id}
@@ -123,9 +135,12 @@ function Page() {
                     </div>
                     <MusicPlayer musicIds={musicIds} playMusicWithId={id} allMusicInfo={musicDetails} />
                 </div>
-            )}
+            )
+            }
 
-        </PageUi>
+
+        </PageUi >
+
     );
 }
 

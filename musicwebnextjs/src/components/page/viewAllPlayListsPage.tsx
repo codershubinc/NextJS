@@ -6,6 +6,7 @@ import musicPlayList from '@/config/dataBase/playListsDb/musicPlayList';
 import Link from 'next/link';
 import cryptoUtil from '@/lib/util/CryptoUtil';
 import userAvatarDBConfig from '@/config/dataBase/userPrefs/userAvatarDBConfig';
+import { Meteors } from '../ui/meteors';
 
 interface Playlists {
     name: string;
@@ -58,28 +59,33 @@ function ViewAllPlayListsPage() {
                             <Link href={`/play?id=${cryptoUtil.encryptString(playlist.$id)}`} key={playlist.$id}>
 
                                 <div key={playlist.$id}
-                                    className="p-4 border rounded shadow  mx-auto "
+                                    className="p-4 border rounded-lg hover:rounded-xl shadow  mx-auto hover:p-3 hover:bg-slate-900 transition duration-300 ease-in-out "
                                 >
-                                    <img
-                                        src={
-                                            String
-                                                (userAvatarDBConfig.getUserAvatarPreviewWithPrefs(
-                                                    playlist.musicPlayListAvatar,
-                                                    1000
-                                                ))
-                                        }
-                                        alt="playListImg"
-                                        className='rounded-xl w-[250px] h-[250px] mb-2  '
-                                    />
-                                    <h1 className="text-xl font-bold mb-2">{playlist.name} </h1>
-                                    <h1 className="text-xl font-bold mb-2">{`  Songs  :` + playlist.musicContains.length} </h1>
-                                </div>
+                                    <div>
 
+
+                                        <img
+                                            src={
+                                                String
+                                                    (userAvatarDBConfig.getUserAvatarPreviewWithPrefs(
+                                                        playlist.musicPlayListAvatar,
+                                                        1000
+                                                    ))
+                                            }
+                                            alt="playListImg"
+                                            className='rounded-xl w-[250px] h-[250px] mb-2  '
+                                        />
+                                        <h1 className="text-xl font-bold mb-2">{playlist.name} </h1>
+                                        <h1 className="text-xl font-bold mb-2">{`  Songs  :` + playlist.musicContains.length} </h1>
+                                    </div>
+                                </div>
                             </Link>
                         ))}
                     </div>
                 )}
+
             </div>
+                    {/* <Meteors number={5}  /> */}
         </PageUi>
     );
 }
