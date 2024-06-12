@@ -14,7 +14,7 @@ function CreatePlaylistByUser(nameForPlayList: string) {
                 musicContains: [],
                 playListSingers: [],
                 like: 0,
-                likedId: [],
+                likeId: [],
                 musicPlayListAvatar: '',
                 musicPlayListBanner: '',
                 publicPlayList: false,
