@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
 'use client';
 import React, { useEffect, useState } from 'react';
@@ -37,19 +38,22 @@ function Page() {
                 console.log('Fetching playlist with ID:', playListId);
                 const playlist = await musicPlayList.getMusicPlayListOne(playListId);
                 setCurrentMusicPlaylist(playlist);
-                if (playlist) {
+                if (playlist.musicContains) {
                     console.log('Fetched playlist:', playlist);
                     const avatarId = playlist?.musicPlayListAvatar;
-                    const musicSinger = playlist?.name
-                    if (avatarId) {
+                    const musicSinger = playlist?.name?.toLowerCase()
+                    const musicContainsInCurrentPlaylist = playlist?.musicContains;
+                    if (musicContainsInCurrentPlaylist && avatarId) {
                         const musicDocsResponse = await musicConfig.getMusicConfig(avatarId);
                         const musicDocs = musicDocsResponse.documents;
                         console.log('Fetched music documents:', musicDocs);
                         setMusicDetails(musicDocs);
                     } else {
-                        const avatar = await musicConfig.getMusicConfigBySingerOne(musicSinger);
+                        console.log('music cantains', musicContainsInCurrentPlaylist);
+
+                        const avatar = await musicConfig.getMusicConfigBy$Id(musicContainsInCurrentPlaylist);
                         const musicDocs = avatar.documents;
-                        console.log('Fetched music documents:', musicDocs);
+                        console.log('Fetched music documents:', avatar);
                         setMusicDetails(musicDocs);
                     }
                 } else {
@@ -66,7 +70,7 @@ function Page() {
         if (playListId) {
             getSongsFromPlayList();
         }
-    }, [playListId]);
+    }, [playListId,]);
 
     const playMusic = (mId: string) => {
         setId(mId);
@@ -82,7 +86,7 @@ function Page() {
         //     showRadialGradient={true}
         // >
 
-        <PageUi className='h-[95vh] w-full '>
+        <PageUi className='h-full w-full '>
 
             {/* <h1 className="text-2xl font-bold mb-4 text-center">Playlist Details</h1> */}
             {loading ? (
@@ -140,9 +144,25 @@ function Page() {
                                     key={music.$id}
                                     id={music.$id}
                                     onClick={() => playMusic(music.$id)}
-                                    className="p-4 flex gap-2 border rounded-lg shadow  bg-white dark:bg-gray-800"
+                                    className="p-1 flex m-[2px] border rounded-lg shadow items-center  bg-white dark:bg-gray-800"
                                 >
-                                    <h2 className="text-lg font-semibold">{music.musicName}</h2>
+                                    <img
+                                        src={
+                                            String
+                                                (
+                                                    currentMusicPlaylist.musicPlayListAvatar ?
+
+                                                        'https://img.icons8.com/?size=80&id=IxuZbtfqlooy&format=png'
+                                                        :
+
+                                                        music.musicAvatarUrl
+                                                )
+                                        }
+
+                                        alt=""
+                                        className='w-12 h-12 object-cover rounded-3xl'
+                                    />
+                                    <h2 className="text-lg font-semibold mx-2 text-nowrap overflow-hidden">{music.musicName}</h2>
                                 </div>
                             ))}
                         </div>

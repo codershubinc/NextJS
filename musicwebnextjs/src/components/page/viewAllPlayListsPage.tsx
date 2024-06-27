@@ -5,8 +5,7 @@ import PageUi from './pageui';
 import musicPlayList from '@/config/dataBase/playListsDb/musicPlayList';
 import Link from 'next/link';
 import cryptoUtil from '@/lib/util/CryptoUtil';
-import userAvatarDBConfig from '@/config/dataBase/userPrefs/userAvatarDBConfig';
-import { Meteors } from '../ui/meteors';
+import userAvatarDBConfig from '@/config/dataBase/userPrefs/userAvatarDBConfig'; 
 
 interface Playlists {
     name: string;
@@ -54,33 +53,36 @@ function ViewAllPlayListsPage() {
                 ) : playLists.length === 0 ? (
                     <p>No playlists found</p>
                 ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-max m-auto gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 sm:w-max lg:grid-cols-3 lg:w-max w-full m-auto gap-4">
 
                         {playLists.map((playlist) => (
                             <Link href={`/play?id=${cryptoUtil.encryptString(playlist.$id)}`} key={playlist.$id}>
 
                                 <div key={playlist.$id}
-                                    className="p-4 border rounded-lg hover:rounded-xl shadow  mx-auto hover:p-3 hover:bg-slate-900 transition duration-300 ease-in-out "
+                                    className="p-1 h-max  border rounded-lg hover:rounded-xl shadow  mx-auto  hover:bg-slate-900 transition duration-300 ease-in-out flex flex-row items-center justify-between"
                                 >
-                                    <div>
 
 
-                                        <img
-                                            src={
-                                                String
-                                                    (playlist.musicPlayListAvatar ?
-                                                        userAvatarDBConfig.getUserAvatarPreviewWithPrefs(
-                                                            playlist.musicPlayListAvatar,
-                                                            1000) :
-                                                        playlist.musicPlayListAvatarUrl
-                                                    )
-                                            }
-                                            alt="playListImg"
-                                            className='rounded-xl w-[250px] h-[250px] mb-2  '
-                                        />
-                                        <h1 className="text-xl font-bold mb-2">{playlist.name} </h1>
-                                        <h1 className="text-xl font-bold mb-2">{`  Songs  :` + playlist.musicContains.length} </h1>
-                                    </div>
+                                    {/* PlayList Singer Avatar */}
+                                    <img
+                                        src={
+                                            String
+                                                (playlist.musicPlayListAvatar ?
+                                                    userAvatarDBConfig.getUserAvatarPreviewWithPrefs(
+                                                        playlist.musicPlayListAvatar,
+                                                        100)
+                                                    :
+                                                    playlist.musicPlayListAvatarUrl
+                                                )
+                                        }
+                                        alt="playListImg"
+                                        className='rounded-full w-[50px] h-[50px] mb-2 border-2 border-solid border-slate-800  '
+                                    />
+                                    {/* title of playlist */}
+                                    <p className="text-xl font-bold mb-2">{playlist.name} </p>
+                                    {/* No of Songs */}
+                                    <p className="text-xl text-slate-800 font-bold mb-2">{`  Songs  :` + playlist.musicContains.length} </p>
+
                                 </div>
                             </Link>
                         ))}
@@ -88,7 +90,6 @@ function ViewAllPlayListsPage() {
                 )}
 
             </div>
-            {/* <Meteors number={5}  /> */}
         </PageUi>
     );
 }

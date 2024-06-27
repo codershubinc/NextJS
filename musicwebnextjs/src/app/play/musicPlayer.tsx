@@ -16,8 +16,8 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
     const [duration, setDuration] = useState<number>(0);
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const [currentSongInfo, setCurrentSongInfo] = useState<any>();
-    const { isSongPlaying } = useAuth(); 
-    
+    const { isSongPlaying } = useAuth();
+
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -126,9 +126,10 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
             setCurrentTime(newTime);
         }
     };
+
     //display current playing music info in control center of device
     // {
-    //     "musicName": "Deva Deva by ana jaiman",
+    // "musicName": "Deva Deva by ana jaiman",
     //     "musicAvatar": "6650e1550002df79ad8f",
     //     "singer": [
     //         "ana jaiman"
@@ -136,7 +137,7 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
     //     "likeId": [],
     //     "like": 0,
     //     "hashTags": [
-    //         "ana jaman"
+    //         "ana jaiman"
     //     ],
     //     "musicId": "665106a7001e9d60a31d",
     //     "description": "ana jaiman",
@@ -187,7 +188,7 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
 
                 title: currentSongInfo?.musicName || 'music',
                 artist: currentSongInfo?.singer.map((singer: string) => singer.trim()).join(' , ') || 'Singer Name',
-                album: 'Album Name',
+                album: currentSongInfo?.musicName || '',
                 artwork: [
                     {
                         src: String(musicAvatarUrl),
@@ -214,6 +215,13 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
 
         }
 
+        navigator.mediaSession.setActionHandler('seekto', (val: any) => {
+            console.log('seek to');
+            handleSeek(val)
+
+
+        })
+
 
         // Cleanup: remove event listener on component unmount
         return () => {
@@ -238,8 +246,14 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
                 style={{ width: '100%' }}
             />
             <div className="flex flex-row  gap-5">
-                {currentSongInfo?.musicName || 'play your music'}
-                <div>
+                <p
+                className='w-[70%] overflow-hidden text-nowrap'
+                >
+                    {currentSongInfo?.musicName || 'play the music'}
+                </p>
+                <div
+                className='w-[30%]'
+                >
                     {Math.floor(currentTime / 60)}:{('0' + Math.floor(currentTime % 60)).slice(-2)} /
                     {Math.floor(duration / 60)}:{('0' + Math.floor(duration % 60)).slice(-2)}
                 </div>
