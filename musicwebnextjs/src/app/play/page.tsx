@@ -41,7 +41,7 @@ function Page() {
                 if (playlist.musicContains) {
                     console.log('Fetched playlist:', playlist);
                     const avatarId = playlist?.musicPlayListAvatar;
-                    const musicSinger = playlist?.name?.toLowerCase()
+                
                     const musicContainsInCurrentPlaylist = playlist?.musicContains;
                     if (musicContainsInCurrentPlaylist && avatarId) {
                         const musicDocsResponse = await musicConfig.getMusicConfig(avatarId);
@@ -82,9 +82,7 @@ function Page() {
     const musicIds = musicDetails.map((music: any) => music.$id);
 
     return (
-        // <AuroraBackground
-        //     showRadialGradient={true}
-        // >
+        
 
         <PageUi className='h-full w-full '>
 
@@ -136,7 +134,7 @@ function Page() {
                         {/* music playList songs container */}
 
                         <div
-                            className="flex flex-col w-max mx-auto h-[75vh] border border-solid border-white  bg-[#040303]  overflow-auto gap-4 p-2 rounded-3xl  shadow-2xl"
+                            className="flex flex-col w-max mx-auto h-[75vh] border border-solid border-white  bg-[#040303]  overflow-auto gap-4 p-2 rounded-3xl  shadow-2xl mb-11"
                         >
                             {musicDetails.map((music: any) => (
 
@@ -162,7 +160,9 @@ function Page() {
                                         alt=""
                                         className='w-12 h-12 object-cover rounded-3xl'
                                     />
-                                    <h2 className="text-lg font-semibold mx-2 text-nowrap overflow-hidden">{music.musicName}</h2>
+                                    <h2 className="text-lg font-semibold mx-2 text-nowrap overflow-hidden">
+                                        {music.musicName}
+                                    </h2>
                                 </div>
                             ))}
                         </div>
