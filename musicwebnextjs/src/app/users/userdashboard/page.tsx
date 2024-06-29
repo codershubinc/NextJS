@@ -30,7 +30,7 @@ const UserDashboard: React.FC = () => {
     const IdInUrl = cryptoUtil.decryptString(searchParams.get('userId') || '');
     const encryptedUserId = cryptoUtil.encryptString(currentUser?.$id);
 
-    //TODO: avatar is not changed based on the user id from url so make it later
+
 
 
     useEffect(() => {

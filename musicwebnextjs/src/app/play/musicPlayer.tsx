@@ -3,6 +3,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import music from '@/config/dataBase/playListsDb/music';
 import { useAuth } from '@/context/AuthContext';
 import userAvatarDBConfig from '@/config/dataBase/userPrefs/userAvatarDBConfig';
+import { useRouter } from 'next/navigation';
+import LikeBtn from '@/components/Buttons/likeBtn';
 
 interface Props {
     musicIds: string[];
@@ -18,6 +20,7 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
     const [currentSongInfo, setCurrentSongInfo] = useState<any>();
     const { isSongPlaying } = useAuth();
 
+    const router = useRouter()
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -127,33 +130,7 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
         }
     };
 
-    //display current playing music info in control center of device
-    // {
-    // "musicName": "Deva Deva by ana jaiman",
-    //     "musicAvatar": "6650e1550002df79ad8f",
-    //     "singer": [
-    //         "ana jaiman"
-    //     ],
-    //     "likeId": [],
-    //     "like": 0,
-    //     "hashTags": [
-    //         "ana jaiman"
-    //     ],
-    //     "musicId": "665106a7001e9d60a31d",
-    //     "description": "ana jaiman",
-    //     "language": "hi",
-    //     "$id": "665106a7001e9d60a31d",
-    //     "$createdAt": "2024-05-24T21:29:27.753+00:00",
-    //     "$updatedAt": "2024-05-24T21:29:27.753+00:00",
-    //     "$permissions": [
-    //         "read(\"user:664f8d770018e5a137d7\")",
-    //         "update(\"user:664f8d770018e5a137d7\")",
-    //         "delete(\"user:664f8d770018e5a137d7\")"
-    //     ],
-    //     "$databaseId": "664cd502000af31ed320",
-    //     "$collectionId": "664dee810029136d3a58"
-    // }
-
+    // >=====> media session api handling
     useEffect(() => {
         if (currentSongInfo === undefined) return console.log('currentSongInfo is undefined');
 
@@ -230,9 +207,20 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
 
     }, [currentSongInfo]);
 
+    const handleBackButton = () => {
+        playAudio()
+        router.push('/')
+    };
+    const playAudio = () => {
+        audioRef.current?.play()
+    }
+    const pauseAudio = () => {
+        audioRef.current?.pause()
+    }
 
+    window.addEventListener('popstate', handleBackButton);
     return (
-        <div className={` w-[97%]  mx-auto absolute  bottom-0 left-0 right-0 rounded-xl bg-gray-800 p-2 m-2`}>
+        <div className={` w-[97%]  mx-auto fixed  bottom-0 left-0 right-0 rounded-xl bg-slate-950 p-2 m-2`}>
 
             <button onClick={playPreviousTrack}>👈</button>
             <button onClick={playNextTrack}>⏭️</button>
@@ -247,12 +235,15 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
             />
             <div className="flex flex-row  gap-5">
                 <p
-                className='w-[70%] overflow-hidden text-nowrap'
+                    className='w-[70%] overflow-hidden text-nowrap'
                 >
                     {currentSongInfo?.musicName || 'play the music'}
                 </p>
+
+                <LikeBtn musicId={currentSongInfo?.$id} />
+
                 <div
-                className='w-[30%]'
+                    className='w-[30%]'
                 >
                     {Math.floor(currentTime / 60)}:{('0' + Math.floor(currentTime % 60)).slice(-2)} /
                     {Math.floor(duration / 60)}:{('0' + Math.floor(duration % 60)).slice(-2)}

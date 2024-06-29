@@ -38,11 +38,11 @@ const LoginPage: React.FC = () => {
                     const userPref = await dbConfig.getDocument(user.$id);
                     if (userPref) {
                         setUserPrefs(userPref);
-                        console.log('userPref call at login', userPref);
+                        // console.log('userPref call at login', userPref);
                     }
                 }
                 setIsUserLogin(true);
-                router.push(`/users/userdashboard?userId=${userId}`);
+                router.push('/');
             }
         } catch (error: any) {
             setError(error.message || 'An unexpected error occurred');

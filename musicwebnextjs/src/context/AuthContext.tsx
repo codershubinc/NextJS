@@ -38,6 +38,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 setIsSongPlaying(false)
 
             } catch (error) {
+                if (error==='false') {
+                    setIsUserLogin(false);
+                    console.log('User not logged in');
+                    return
+                    
+                    
+                }
+                console.log('Error checking user login:', error);
                 setIsUserLogin(false);
             }
         };

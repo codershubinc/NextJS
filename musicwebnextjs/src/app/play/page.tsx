@@ -41,7 +41,7 @@ function Page() {
                 if (playlist.musicContains) {
                     console.log('Fetched playlist:', playlist);
                     const avatarId = playlist?.musicPlayListAvatar;
-                
+
                     const musicContainsInCurrentPlaylist = playlist?.musicContains;
                     if (musicContainsInCurrentPlaylist && avatarId) {
                         const musicDocsResponse = await musicConfig.getMusicConfig(avatarId);
@@ -82,7 +82,7 @@ function Page() {
     const musicIds = musicDetails.map((music: any) => music.$id);
 
     return (
-        
+
 
         <PageUi className='h-full w-full '>
 
@@ -100,39 +100,11 @@ function Page() {
                     Please login to play music
                 </div>
             ) : (
-                <div className=' my-auto mt-3  h-max  justify-around items-center '>
+                <div className=' my-auto mt-3  h-[100%]  justify-around items-center '>
                     <div
                         className='flex'
-                    >
-                        <div
-                            className=' hidden md:block lg:block  w-[50%] items-center justify-center  '
-                        >
-
-                            <h1 className="text-2xl font-bold mb-4 text-center">Current Music</h1>
-                            <img
-                                src={
-                                    String
-                                        (
-                                            String
-                                                (
-                                                    currentMusicPlaylist.musicPlayListAvatar ?
-
-                                                        userAvatarDBConfig.getUserAvatarPreviewWithPrefs(
-                                                            currentMusicPlaylist.musicPlayListAvatar,
-                                                            1000) :
-
-                                                        currentMusicPlaylist.musicPlayListAvatarUrl
-                                                )
-                                        )
-
-                                }
-                                alt={currentMusicPlaylist?.musicPlayListName}
-                                className='w-96 h-96 object-cover rounded-3xl mx-auto shadow-lg shadow-white'
-                            />
-                        </div>
-
+                    > 
                         {/* music playList songs container */}
-
                         <div
                             className="flex flex-col w-max mx-auto h-[75vh] border border-solid border-white  bg-[#040303]  overflow-auto gap-4 p-2 rounded-3xl  shadow-2xl mb-11"
                         >

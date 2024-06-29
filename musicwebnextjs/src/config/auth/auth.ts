@@ -46,7 +46,7 @@ export class AuthService {
         try {
             return await this.account.get();
         } catch (error) {
-            throw error;
+            throw false;
         }
     }
 
@@ -55,6 +55,7 @@ export class AuthService {
             await this.account.deleteSessions();
         } catch (error) {
             console.log("Appwrite serive :: logout :: error", error);
+            throw error;
         }
     }
 }
