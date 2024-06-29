@@ -208,13 +208,23 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
     }, [currentSongInfo]);
 
     const handleBackButton = () => {
-        playAudio()
+        console.log('back btn called');
+
+        pauseAudio()
+        const audio = audioRef.current || new Audio();
+        audio.src = 'df' 
+        
+        audioRef.current?.remove()
+        audioRef.current = null
+        window.removeEventListener('popstate', handleBackButton);
         router.push('/')
     };
     const playAudio = () => {
         audioRef.current?.play()
     }
     const pauseAudio = () => {
+        console.log('pause audio');
+
         audioRef.current?.pause()
     }
 
@@ -240,7 +250,7 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
                     {currentSongInfo?.musicName || 'play the music'}
                 </p>
 
-                <LikeBtn musicId={currentSongInfo?.$id} />
+                {/* <LikeBtn musicId={currentSongInfo?.$id} /> */}
 
                 <div
                     className='w-[30%]'
