@@ -60,7 +60,7 @@ function ViewAllPlayListsPage() {
                         )
                         :
                         playLists.length === 0 ? (
-                            <p>No playlists found</p>
+                            <p>Something went wrong</p>
                         )
                             :
                             isUserLogin === false ?
