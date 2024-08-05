@@ -38,7 +38,9 @@ export class MusicConfig {
         like,
         language,
         musicUri,
-        musicAvatarUrl
+        musicAvatarUrl,
+        year,
+        url
     }: {
         musicName: string
         musicId: string
@@ -51,6 +53,8 @@ export class MusicConfig {
         language: string
         musicUri: string
         musicAvatarUrl: string
+        year: number
+        url: string
     }) {
         try {
             return await this.databases.createDocument(
@@ -68,7 +72,9 @@ export class MusicConfig {
                     like,
                     language,
                     musicUri,
-                    musicAvatarUrl
+                    musicAvatarUrl,
+                    year,
+                    url
                 }
             )
         } catch (error) {

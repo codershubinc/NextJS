@@ -30,7 +30,7 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
         const audio = audioRef.current;
 
         const handleAudioEnd = () => {
-            console.log('Audio has ended');
+            // console.log('Audio has ended');
             playNextTrack();
         };
 
@@ -59,13 +59,13 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
 
     const playNextTrack = () => {
         setCurrentTrackIndex(prevIndex => prevIndex + 1)
-        console.log('Playing next track:', currentTrackIndex + 1);
+        // console.log('Playing next track:', currentTrackIndex + 1);
     };
 
     const playPreviousTrack = () => {
         setCurrentTrackIndex(prevIndex => {
             const previousIndex = prevIndex > 0 ? (prevIndex - 1) : (musicIds.length - 1);
-            console.log('Playing previous track:', previousIndex);
+            // console.log('Playing previous track:', previousIndex);
             return previousIndex;
         });
     };
@@ -75,7 +75,7 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
         if (trackIndex >= 0 && trackIndex < musicIds.length && audio) {
 
             setCurrentSongInfo(allMusicInfo[currentTrackIndex]);
-            console.log('Current song info at play music func:', allMusicInfo[trackIndex]);
+            // console.log('Current song info at play music func:', allMusicInfo[trackIndex]);
 
             const currentMusicId = (allMusicInfo[trackIndex].musicId ?
                 String(music.getMusic(allMusicInfo[trackIndex].musicId)) :
@@ -88,7 +88,7 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
                 console.error('Error playing music:', error);
             });
         } else if (trackIndex >= musicIds.length) {
-            console.error('Track index out of bounds:', trackIndex);
+            // console.error('Track index out of bounds:', trackIndex);
             setCurrentTrackIndex(0);
 
         } else {
@@ -101,10 +101,10 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
             const trackIndex = musicIds.indexOf(playMusicWithId);
 
             if (trackIndex !== -1) {
-                console.log('Setting initial track index:', trackIndex);
+                // console.log('Setting initial track index:', trackIndex);
                 setCurrentTrackIndex(trackIndex);
                 setCurrentSongInfo(allMusicInfo[trackIndex]);
-                console.log('Current song info:', currentSongInfo);
+                // console.log('Current song info:', currentSongInfo);
             } else {
                 console.error('Track ID not found in musicIds:', playMusicWithId);
             }
@@ -115,7 +115,7 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
         if (isSongPlaying && currentTrackIndex !== -1) {
             playMusic(currentTrackIndex);
             setCurrentSongInfo(allMusicInfo[currentTrackIndex]);
-            console.log('Current song info:', currentSongInfo);
+            // console.log('Current song info:', currentSongInfo);
 
         }
 
@@ -142,7 +142,6 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
                 case 'MediaTrackNext':
                     playNextTrack();
                     break;
-                // Add more cases for other media keys if needed
                 default:
                     break;
             }
@@ -155,10 +154,10 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
                         userAvatarDBConfig.getUserAvatarPreviewWithPrefs(currentSongInfo.musicAvatar, 500) :
                         currentSongInfo?.musicAvatarUrl
                 )
-            console.log('music avatar url', musicAvatarUrl.href);
+            // console.log('music avatar url', musicAvatarUrl.href);
 
-            console.log('currentSongInfo', currentSongInfo);
-            console.log('music avatar id', currentSongInfo?.musicAvatar);
+            // console.log('currentSongInfo', currentSongInfo);
+            // console.log('music avatar id', currentSongInfo?.musicAvatar);
 
 
             navigator.mediaSession.metadata = new MediaMetadata({
@@ -208,19 +207,23 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
     }, [currentSongInfo]);
 
     const handleBackButton = () => {
-        console.log('back btn called');
+        // console.log('back btn called');
 
         pauseAudio()
-        const audio = audioRef.current || new Audio();
-        audio.src = 'df' 
-        
-        audioRef.current?.remove()
-        audioRef.current = null
+        // const audio = audioRef.current || new Audio();
+        // audio.src = 'df' 
+
+        // audioRef.current?.remove()
+        // audioRef.current = null
         window.removeEventListener('popstate', handleBackButton);
         router.push('/')
     };
     const playAudio = () => {
-        audioRef.current?.play()
+        if (audioRef.current?.paused) {
+            audioRef.current?.play()
+        }else{
+            audioRef.current?.pause()
+        }
     }
     const pauseAudio = () => {
         console.log('pause audio');
@@ -233,6 +236,7 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
         <div className={` w-[97%]  mx-auto fixed  bottom-0 left-0 right-0 rounded-xl bg-slate-950 p-2 m-2`}>
 
             <button onClick={playPreviousTrack}>👈</button>
+            <button onClick={playAudio} >pl/pa</button>
             <button onClick={playNextTrack}>⏭️</button>
             {/* Seek bar */}
             <input

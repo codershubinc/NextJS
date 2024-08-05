@@ -62,7 +62,9 @@ const MusicUploadForm = ({ className }: { className: string }) => {
                 like: 0,
                 language: language,
                 musicUri: data.musicUrl,
-                musicAvatarUrl: data.musicAvatarUrl
+                musicAvatarUrl: data.musicAvatarUrl,
+                year: 2332,
+                url: ' no url'
             });
 
             console.log('Music Data:', result);
