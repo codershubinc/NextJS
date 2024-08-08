@@ -226,8 +226,7 @@ const MusicPlayer: React.FC<Props> = ({ musicIds, playMusicWithId, allMusicInfo 
         }
     }
     const pauseAudio = () => {
-        console.log('pause audio');
-
+        // console.log('pause audio');
         audioRef.current?.pause()
     }
 
