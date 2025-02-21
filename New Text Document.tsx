@@ -26,7 +26,7 @@ const MusicUploadForm = ({ className }: { className: string }) => {
     const [language, setLanguage] = useState<string>('hi');
 
     const handleLanguageChange = (value: string) => {
-        setLanguage(value);
+        
         // Assuming you have some logic to handle the language change
         // For example, updating the i18n settings or redirecting to a localized route
         console.log('Selected Language:', value);
