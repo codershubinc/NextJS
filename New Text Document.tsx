@@ -29,7 +29,7 @@ const MusicUploadForm = ({ className }: { className: string }) => {
         
         // Assuming you have some logic to handle the language change
         // For example, updating the i18n settings or redirecting to a localized route
-        console.log('Selected Language:', value);
+        // console.log('Selected Language:', value);
 
         // You can also perform any other logic here based on the selected language
     };
