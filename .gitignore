@@ -1,3 +1,5 @@
 musicwebnextjs/.env
 auth-with-nextjs/.env
 musicwebnextjs/.creds.env
+
+.env
